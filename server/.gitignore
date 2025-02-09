@@ -1,0 +1,44 @@
+# Byte-compiled / cached files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+*.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django specific
+db.sqlite3
+db.sqlite3-journal
+/media/
+*.log
+
+# Ignore secret settings and environment variables
+.env
+*.env
+
+# Migrations (if you want to exclude initial migrations)
+*/migrations/*.py
+*/migrations/*.pyc
+!*/migrations/__init__.py
+
+# Static and compiled files
+/staticfiles/
+/static/
+/node_modules/
+
+# Ignore compiled TypeScript and JavaScript files
+*.map
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS and Linux system files
+.DS_Store
+*.bak
