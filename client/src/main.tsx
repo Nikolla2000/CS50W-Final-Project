@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import SomePage from './pages/SomePage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
 import Layout from './components/Layout/Layout.tsx'
+import LoginPage from './pages/LoginPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: '/somepage',
     element: <Layout><SomePage /></Layout>,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
   },
 ]);
 
