@@ -14,6 +14,9 @@ export default function LoginPage() {
                 </div>
                     <h2>Login to Your Account</h2>
                     <LoginForm/>
+                    <div className="left-side-register-link">
+                        <Link to="/">New Here? Click here to create an account!</Link>
+                    </div>
                 </div>
             </div>
             <div className="login-right-side">

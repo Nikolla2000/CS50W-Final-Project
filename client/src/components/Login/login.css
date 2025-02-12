@@ -70,6 +70,11 @@
     text-decoration: none;
 }
 
+.left-side-register-link {
+    margin-top: 20px;
+    display: none;
+}
+
 
 @media screen and (max-width:600px) {
     .login-page-wrapper {
@@ -78,6 +83,7 @@
 
     .login-left-side {
         margin: 0 auto;
+        width: auto;
     }
 
     .left-side-content {
@@ -87,4 +93,9 @@
     .login-right-side {
         display: none;
     }
+
+    .left-side-register-link {
+        display: block;
+    }
+    
 }
