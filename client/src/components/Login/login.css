@@ -69,3 +69,22 @@
 .login-right-side a {
     text-decoration: none;
 }
+
+
+@media screen and (max-width:600px) {
+    .login-page-wrapper {
+        display: block;
+    }
+
+    .login-left-side {
+        margin: 0 auto;
+    }
+
+    .left-side-content {
+        padding:0;
+    }
+
+    .login-right-side {
+        display: none;
+    }
+}
