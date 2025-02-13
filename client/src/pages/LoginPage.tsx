@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { WhiteButton } from "../components/Button/Button";
-import LoginForm from "../components/Login/LoginForm";
-import "../components/Login/login.css";
+import LoginForm from "../components/Authentication/LoginForm";
+import "../components/Authentication/auth.css";
 
 export default function LoginPage() {
     return (
