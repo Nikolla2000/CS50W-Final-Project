@@ -99,3 +99,34 @@
     }
     
 }
+
+.register-page-wrapper {
+    padding:50px;
+    text-align: center;
+}
+
+.register-page-content {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.register-page-content h2{
+    font-size: 2.4em;
+    margin-top:80px;
+    margin-bottom: 80px;
+}
+
+.register-page-content button {
+    margin: 40px 0 15px 0;
+}
+
+
+@media screen and (max-width: 600px) {
+    .register-page-content h2{
+        font-size: 1.4em;
+    }
+
+    .register-page-content {
+        width: 100%;
+    }
+}

@@ -8,6 +8,7 @@ import SomePage from './pages/SomePage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
 import Layout from './components/Layout/Layout.tsx'
 import LoginPage from './pages/LoginPage.tsx'
+import RegisterPage from './pages/RegisterPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
   },
 ]);
 

@@ -15,7 +15,7 @@ export default function LoginPage() {
                     <h2>Login to Your Account</h2>
                     <LoginForm/>
                     <div className="left-side-register-link">
-                        <Link to="/">New Here? Click here to create an account!</Link>
+                        <Link to="/register">New Here? Click here to create an account!</Link>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@ export default function LoginPage() {
                 <div className="right-side-content">
                     <h2>New Here?</h2>
                     <p>Sign up and destroy procrastination!</p>
-                    <Link to="/">
+                    <Link to="/register">
                         <WhiteButton type="button">Sign up</WhiteButton>
                     </Link>
                 </div>

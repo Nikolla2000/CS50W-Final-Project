@@ -10,11 +10,12 @@ type FormValues = {
 }
 
 const schema = z.object({
-    username: z.string().min(4, { message: "Username must be at least 3 characters long" }),
-    password: z.string().min(7, { message: "Invalid password" }),
+    username: z.string().min(3, { message: "Username must be at least 3 characters long" }),
+    password: z.string().min(6, { message: "Invalid password" }),
 })
 
 export default function LoginForm() {
+    
     const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
         resolver: zodResolver(schema),
     });
