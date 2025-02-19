@@ -24,7 +24,6 @@ export default function LoginForm() {
 
     useEffect(() => {
         getSession();
-        console.log("aa" + csrf);
     }, []);
 
     const getCSRF = async () => {

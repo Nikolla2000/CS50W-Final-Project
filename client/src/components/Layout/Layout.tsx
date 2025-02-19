@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   SwipeableDrawer,
@@ -18,10 +18,37 @@ const drawerWidth = 240;
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState<string>("");
 
   const toggleDrawer = () => {
     setOpen((prev) => !prev);
   };
+
+  const whoami = async () => {
+    try {
+        const res = await fetch("http://localhost:8000/users/whoami", {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include"
+        })
+        const data = await res.json();
+
+        if(!res.ok) {
+            throw new Error(`${res.status}: ${data.error}`);
+        }
+
+        console.log(`You are logged in as ${data.username}`);
+        setUsername(data.username);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+useEffect(() => {
+  whoami();
+})
+  
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -31,7 +58,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            My App
+            FocusFlow
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Typography variant="h6" noWrap component="div">
+            Welcome, {username}
           </Typography>
         </Toolbar>
       </AppBar>
