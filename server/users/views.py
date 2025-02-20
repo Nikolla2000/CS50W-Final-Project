@@ -6,6 +6,11 @@ from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import UserRegistrationSerializer
+
 
 def get_csrf(request):
     response = JsonResponse({ 'message': 'CSRF cookie set' })
@@ -52,3 +57,14 @@ def whoami_view(request):
         return JsonResponse({'isAuthenticated': False})
 
     return JsonResponse({'username': request.user.username})
+
+
+class RegisterUserView(APIView):
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({ "message": "User registered successfuly", "user": serializer.data },
+                            status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

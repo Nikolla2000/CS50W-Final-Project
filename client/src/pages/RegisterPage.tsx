@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import RegisterForm from "../components/Authentication/RegisterForm";
 import "../components/Authentication/auth.css";
+import RegisterFormNew from "../components/Authentication/RegisterFormNew";
 
 export default function RegisterPage() {
     return (
@@ -11,7 +12,7 @@ export default function RegisterPage() {
             </div>
             <div className="register-page-content">
                 <h2>Create an account and become unstoppable!</h2>
-                <RegisterForm/>
+                <RegisterFormNew/>
                 <div className="register-link">
                     <Link to="/login">Already have an account? Click here to Sign In!</Link>
                 </div>

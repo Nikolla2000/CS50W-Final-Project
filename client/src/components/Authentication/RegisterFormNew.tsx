@@ -3,14 +3,18 @@ import { TextField, MenuItem, Select, FormControl, InputLabel, FormHelperText } 
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 import { GreenButton } from "../Button/Button"
+import { countries } from "../../utils/countries"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 type FormValues = {
     username: string
+    first_name: string
     email: string
     age: number
     country: string
     password: string
-    confirmPassword: string
+    confirm_password: string
 }
 
 const schema = z.object({
@@ -26,33 +30,120 @@ const schema = z.object({
         .regex(/^[1-9][0-9]*$/, { message: "Please enter a valid age." })
         .min(1, { message: "Please enter a valid age." }),
 
+    first_name: z.string()
+    .min(2, { message: "First name must be at least 2 characters long"})
+    .max(30, { message: "First name can\'t be longer than 30 characters"})
+    .regex(/^[a-zA-Z]+$/, { message: "First name must contain only letters" }),
+
     country: z.string()
-        .min(2, { message: "You must choose a country" })
-        .max(50, { message: "Country can't be longer than 50 characters" }),
+    .min(2, { message: "You must choose a country" })
+    .max(50, { message: "Country can't be longer than 50 characters" }),
 
     password: z.string()
         .min(6, { message: "Password must be at least 6 characters long" })
         .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
         .regex(/[0-9]/, { message: "Password must contain at least one number" }),
 
-    confirmPassword: z.string()
+    confirm_password: z.string()
         .min(6, { message: "Confirm Password must be at least 6 characters long" })
 });
 
-const countries = [
-    "USA", "Canada", "UK", "Germany", "France", "Australia", "India"
-];
 
-export default function RegisterForm() {
+export default function RegisterFormNew() {
 
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [csrf, setCsrf] = useState<string | null>(null);
     const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>({
         resolver: zodResolver(schema),
     })
 
-    const onSubmit = (data: FormValues) => {
-        if (data.password !== data.confirmPassword) {
-            setError("confirmPassword", { type: "manual", message: "Passwords don't match" });
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        getSession();
+    }, [])
+
+    const getSession = async () => {
+        try {
+            const res = await fetch("http://localhost:8000/users/session/", {
+                credentials: "include",
+            })
+            const data = await res.json();
+
+            if(!res.ok) {
+                throw new Error(`${res.status}: ${data.error}`);
+            }
+            if(data.isAuthenticated) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+                getCSRF();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getCSRF = async () => {
+        try {
+            const res = await fetch("http://localhost:8000/users/csrf/", {
+            credentials: "include",
+        })
+            let csrfToken = res.headers.get("X-CSRFToken");
+            setCsrf(csrfToken);
+            console.log(csrfToken);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const onSubmit = async (data: FormValues) => {
+        if (data.password !== data.confirm_password) {
+            setError("confirm_password", { type: "manual", message: "Passwords don't match" });
             return;
+        }
+
+        try {
+            const headers: Record<string, string> = {
+                "Content-Type": "application/json",
+            };
+
+            if (csrf) {
+                headers["X-CSRFToken"] = csrf;
+            }
+
+            const res = await fetch("http://localhost:8000/users/register/", {
+                method: "POST",
+                headers: headers,
+                credentials: "include",
+                body: JSON.stringify(data)
+            })
+            const respData = await res.json();
+
+            console.log(respData.errors)
+            if(!res.ok) {
+                setError("username", { type: "manual", message: respData.username });
+                throw new Error(`${res.status}: ${respData.error}`);
+            }
+
+            const loginRes = await fetch("http://localhost:8000/users/login/", {
+                method: "POST",
+                headers: headers,
+                credentials: "include",
+                body: JSON.stringify({ username: data.username, password: data.password }),
+            })
+
+            const loginRespData = await loginRes.json();
+
+            if (!loginRes.ok) {
+                setError("password", { type: "manual", message: loginRespData.message || "Login failed" });
+                throw new Error(`${loginRes.status}: ${loginRespData.error}`);
+            }
+
+            setIsAuthenticated(true);
+            navigate("/home");
+        } catch (err) {
+            console.log(err);
         }
         
         console.log(data);
@@ -82,6 +173,32 @@ export default function RegisterForm() {
                             }}
                             error={!!errors.username}
                             helperText={errors.username?.message}
+                        />
+                    )}
+                />
+            </div>
+
+            {/* First Name Input */}
+            <div style={{ marginBottom: '16px' }}>
+                <Controller
+                    name="first_name"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            label="First name"
+                            variant="outlined"
+                            fullWidth
+                            sx={{
+                                borderRadius: '25px',
+                                backgroundColor: '#f0f0f0',
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '25px',
+                                },
+                            }}
+                            error={!!errors.first_name}
+                            helperText={errors.first_name?.message}
                         />
                     )}
                 />
@@ -169,6 +286,7 @@ export default function RegisterForm() {
                                 label="Country"
                                 fullWidth
                                 sx={{
+                                    textAlign: 'left',
                                     borderRadius: '25px',
                                 }}
                             >
@@ -212,7 +330,7 @@ export default function RegisterForm() {
             {/* Confirm Password Input */}
             <div style={{ marginBottom: '16px' }}>
                 <Controller
-                    name="confirmPassword"
+                    name="confirm_password"
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
@@ -229,8 +347,8 @@ export default function RegisterForm() {
                                     borderRadius: '25px',
                                 },
                             }}
-                            error={!!errors.confirmPassword}
-                            helperText={errors.confirmPassword?.message}
+                            error={!!errors.confirm_password}
+                            helperText={errors.confirm_password?.message}
                         />
                     )}
                 />
