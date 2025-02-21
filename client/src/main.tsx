@@ -10,11 +10,18 @@ import Layout from './components/Layout/Layout.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import RegisterPage from './pages/RegisterPage.tsx'
 import { AuthProvider } from './providers/AuthProvider.tsx'
+import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute.tsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout><HomePage /></Layout>,
+    element: (
+      <Layout>
+        <ProtectedRoute>
+          <HomePage />
+        </ProtectedRoute>
+      </Layout>
+    ),
     errorElement: <NotFoundPage/>
   },
   {
