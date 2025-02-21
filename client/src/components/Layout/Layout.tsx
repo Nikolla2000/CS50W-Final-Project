@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   SwipeableDrawer,
   List,
@@ -19,6 +19,8 @@ const drawerWidth = 240;
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setOpen((prev) => !prev);
@@ -47,8 +49,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 useEffect(() => {
   whoami();
-})
+}, [])
   
+
+const logout = async () => {
+  try {
+    const res = await fetch("http://localhost:8000/users/logout/", {
+      credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(`${res.status}: ${data.error}`);
+    }
+    navigate("/login");
+  } catch (err) {
+    console.error("Error logging out:", err);
+  }
+}
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -61,9 +80,12 @@ useEffect(() => {
             FocusFlow
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Typography variant="h6" noWrap component="div">
-            Welcome, {username}
-          </Typography>
+          {username && 
+            <Typography variant="h6" noWrap component="div">
+              Welcome, {username}
+              <button onClick={logout}>Log out</button>
+            </Typography>
+          }
         </Toolbar>
       </AppBar>
 

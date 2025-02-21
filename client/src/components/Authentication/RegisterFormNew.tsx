@@ -6,6 +6,7 @@ import { GreenButton } from "../Button/Button"
 import { countries } from "../../utils/countries"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { getCSRF, getSession, login, register } from "../../services/authService"
 
 type FormValues = {
     username: string
@@ -60,42 +61,20 @@ export default function RegisterFormNew() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getSession();
+        getSessionData();
     }, [])
 
-    const getSession = async () => {
-        try {
-            const res = await fetch("http://localhost:8000/users/session/", {
-                credentials: "include",
-            })
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw new Error(`${res.status}: ${data.error}`);
-            }
-            if(data.isAuthenticated) {
-                setIsAuthenticated(true);
-            } else {
-                setIsAuthenticated(false);
-                getCSRF();
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    const getCSRF = async () => {
-        try {
-            const res = await fetch("http://localhost:8000/users/csrf/", {
-            credentials: "include",
-        })
-            let csrfToken = res.headers.get("X-CSRFToken");
+    const getSessionData = async () => {
+        const session = await getSession();
+        if (session && session.isAuthenticated) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+            const csrfToken = await getCSRF();
             setCsrf(csrfToken);
-            console.log(csrfToken);
-        } catch (err) {
-            console.log(err);
         }
     }
+
 
     const onSubmit = async (data: FormValues) => {
         if (data.password !== data.confirm_password) {
@@ -104,49 +83,24 @@ export default function RegisterFormNew() {
         }
 
         try {
-            const headers: Record<string, string> = {
-                "Content-Type": "application/json",
-            };
-
-            if (csrf) {
-                headers["X-CSRFToken"] = csrf;
+            const registerResponse = await register(data, csrf);
+            if (registerResponse.errors) {
+                setError("username", { type: "manual", message: registerResponse.errors.username });
+                throw new Error(registerResponse.error);
             }
 
-            const res = await fetch("http://localhost:8000/users/register/", {
-                method: "POST",
-                headers: headers,
-                credentials: "include",
-                body: JSON.stringify(data)
-            })
-            const respData = await res.json();
-
-            console.log(respData.errors)
-            if(!res.ok) {
-                setError("username", { type: "manual", message: respData.username });
-                throw new Error(`${res.status}: ${respData.error}`);
-            }
-
-            const loginRes = await fetch("http://localhost:8000/users/login/", {
-                method: "POST",
-                headers: headers,
-                credentials: "include",
-                body: JSON.stringify({ username: data.username, password: data.password }),
-            })
-
-            const loginRespData = await loginRes.json();
-
-            if (!loginRes.ok) {
-                setError("password", { type: "manual", message: loginRespData.message || "Login failed" });
-                throw new Error(`${loginRes.status}: ${loginRespData.error}`);
+            const loginResponse = await login({ username: data.username, password: data.password }, csrf);
+            console.log('loginResponse:', loginResponse);
+            if (loginResponse?.message != "Successfully logged in.") {
+              setError("password", { type: "manual", message: loginResponse.message || "Login failed" });
+              throw new Error(loginResponse.error);
             }
 
             setIsAuthenticated(true);
-            navigate("/home");
+            navigate("/");
         } catch (err) {
-            console.log(err);
+            console.log("Error on register:", err);
         }
-        
-        console.log(data);
     }
 
     return (

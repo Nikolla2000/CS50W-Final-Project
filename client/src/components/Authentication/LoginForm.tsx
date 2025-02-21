@@ -3,9 +3,9 @@ import { GreenButton } from "../Button/Button";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { getCSRF, getSession, login } from "../../services/authService";
 
 type FormValues = {
     username: string
@@ -23,97 +23,43 @@ export default function LoginForm() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getSession();
+        getSessionData();
     }, []);
 
-    const getCSRF = async () => {
+    const getSessionData = async () => {
         try {
-            const res = await fetch("http://localhost:8000/users/csrf/", {
-            credentials: "include",
-        })
-            let csrfToken = res.headers.get("X-CSRFToken");
-            setCsrf(csrfToken);
-            console.log(csrfToken);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    const getSession = async () => {
-        try {
-            const res = await fetch("http://localhost:8000/users/session/", {
-                credentials: "include",
-            })
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw new Error(`${res.status}: ${data.error}`);
-            }
-            if(data.isAuthenticated) {
+            const sessionData = await getSession();
+            if (sessionData.isAuthenticated) {
                 setIsAuthenticated(true);
+                navigate("/");
             } else {
                 setIsAuthenticated(false);
-                getCSRF();
+                const csrfToken = await getCSRF();
+                setCsrf(csrfToken);
             }
         } catch (err) {
-            console.log(err);
+            console.error("Error getting session:", err);
         }
     }
 
-    const whoami = async () => {
-        try {
-            const res = await fetch("/users/whoami", {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include"
-            })
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw new Error(`${res.status}: ${data.error}`);
-            }
-
-            console.log(`You are logged in as ${data.username}`);
-        } catch (err) {
-            console.log(err);
-        }
-    }
     
     const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>({
         resolver: zodResolver(schema),
     });
 
+
     const onSubmit = async (data: FormValues) => {
-        console.log(data);
-
         try {
-            const headers: Record<string, string> = {
-                "Content-Type": "application/json",
-            };
-    
-            if (csrf) {
-                headers["X-CSRFToken"] = csrf;
-            }
-            const res = await fetch("http://localhost:8000/users/login/", {
-                method: "POST",
-                headers: headers,
-                credentials: "include",
-                body: JSON.stringify(data)
-            })
-            const respData = await res.json();
-
-            if(!res.ok) {
-                setError("password", { type: "manual", message: respData.message });
-                throw new Error(`${res.status}: ${respData.error}`);
-            }
+            await login(data, csrf);
 
             setIsAuthenticated(true);
-            navigate("/home");
+            navigate("/");
         } catch (err) {
-            console.log(err);
+            setError("password", { type: "manual", message: "Invalid username or password" });
         }
     }
+
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div style={{ marginBottom: '16px' }}>
