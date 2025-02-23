@@ -101,3 +101,17 @@ export const whoami = async () => {
         console.log(err);
     }
 }
+
+
+export const logout = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/users/logout/", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
+
+    } catch (err) {
+      console.error("Error logging out:", err);
+    }
+  };

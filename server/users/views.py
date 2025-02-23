@@ -56,7 +56,7 @@ def whoami_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({'isAuthenticated': False})
 
-    return JsonResponse({'username': request.user.username})
+    return JsonResponse({'username': request.user.username, 'first_name': request.user.first_name})
 
 
 class RegisterUserView(APIView):
