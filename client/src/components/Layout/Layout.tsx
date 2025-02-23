@@ -17,6 +17,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { logout } from "../../services/authService";
+import routes from "../../utils/routes.tsx";
 
 const drawerWidth = 240;
 
@@ -109,16 +110,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Box sx={{ width: drawerWidth }} role="presentation" onClick={toggleDrawer}>
           <Toolbar />
           <List>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/">
-                <ListItemText primary="Home" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/somepage">
-                <ListItemText primary="Some Page" />
-              </ListItemButton>
-            </ListItem>
+            {routes.map((route) => (
+              <ListItem disablePadding key={route.path}>
+                <ListItemButton component={Link} to={route.path}>
+                  <ListItemText primary={route.routeName} />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Box>
       </SwipeableDrawer>

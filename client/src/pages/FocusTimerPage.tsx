@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function SomePage() {
+export default function FocusTimerPage() {
   return (
     <div>
-      SomePage
+      Focus Timer Page
     </div>
   );
 }
