@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'productino_ai',
     'rest_framework',
     'corsheaders',
     'users',
