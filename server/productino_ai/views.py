@@ -20,10 +20,14 @@ client = Groq(
 
 class ChatWithProductino(APIView):
     def post(self, request):
+
+        if not request.user.is_authenticated:
+            return Response({ "message": "You must be signed in to use this feature" }, status=status.HTTP_401_UNAUTHORIZED)
+
         user_message = request.data.get("message")
 
-        # if not user_message:
-        #     return Response({ "error": "No message provided" }, status=status.HTTP_400_BAD_REQUEST)
+        if not user_message:
+            return Response({ "error": "No message provided" }, status=status.HTTP_400_BAD_REQUEST)
 
         conversation_history = request.session.get("conversation_history", [])
 
@@ -34,7 +38,7 @@ class ChatWithProductino(APIView):
                 messages=conversation_history + [
                     {
                         "role": "system",  
-                        "content": "You are a helpful assistant who answers in bulgarian only",  
+                        "content": "You are a helpful assistant",  
                     },
                 ],
                 model="llama-3.3-70b-versatile",
