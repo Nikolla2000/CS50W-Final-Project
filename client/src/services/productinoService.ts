@@ -11,9 +11,14 @@ export const fetchConversation = async () => {
 }
 
 
-export const promptChatBot = async (data: PromptFormValues) => {
+export const promptChatBot = async (data: PromptFormValues, csrfToken: string | null) => {
     try {
-        const res = await api.post("/productino/chat/", data);
+        const res = await api.post("/productino/chat/", data, {
+            headers: {
+                "X-CSRFToken": csrfToken,
+            },
+            withCredentials: true,
+        });
         console.log(res.data);
         return res.data;
       } catch (err) {

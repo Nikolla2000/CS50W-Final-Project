@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import api from '../axiosConfig';
 import { TextField } from '@mui/material';
+import { useAuth } from '../providers/AuthProvider';
 
 export type PromptFormValues = {
   message: string
@@ -15,6 +16,8 @@ const schema = z.object({
 })
 
 export default function ProductinoPage() {
+  const authContext = useAuth();
+  const { csrf } = authContext;
 
   useEffect(() => {
 	const getConversation = async() => {
@@ -29,7 +32,7 @@ export default function ProductinoPage() {
   })
 
   const onSubmit = async (data: PromptFormValues) => {
-    promptChatBot(data);
+    promptChatBot(data, csrf);
 	await fetchConversation();
   }
 
