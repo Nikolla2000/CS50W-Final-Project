@@ -3,8 +3,10 @@ import { PromptFormValues } from "../pages/ProductinoPage";
 
 export const fetchConversation = async () => {
     try {
-        const res = await api.get("/productino/chat/");
-        console.log(res.data);
+        const res = await api.get("/productino/chat/", {
+            withCredentials: true
+        });
+        return res.data.conversation_history;
     } catch (err) {
         console.log(err);
     }

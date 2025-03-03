@@ -1,0 +1,38 @@
+.productino-page-wrapper {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.chat-wrapper {
+  /* width: 60%; */
+  margin: 0 auto;
+  /* max-height: 400px;
+  overflow-x: scroll; */
+  /* max-height: 400px;
+  overflow-y: scroll; */
+}
+
+.text-msg-wrapper {
+  padding:  0px 15px;
+  display: flex;
+}
+
+.text-msg-user {
+  background-color: rgb(228, 228, 228);
+  border-radius: 20px;
+  text-align: right;
+  justify-self: flex-end;
+  margin-bottom: 25px;
+}
+
+.text-msg-assistant {
+  display: inline-block;
+  /* padding-bottom: 40px; */
+  margin-bottom: 50px;
+}
+
+#prompt-form {
+  /* position: fixed;
+  bottom:10%;
+  width: 100%; */
+}

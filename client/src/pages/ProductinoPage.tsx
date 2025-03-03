@@ -6,6 +6,8 @@ import { z } from 'zod';
 import api from '../axiosConfig';
 import { TextField } from '@mui/material';
 import { useAuth } from '../providers/AuthProvider';
+import ConversationHistory from '../components/Productino/ConversationHistory';
+import "../components/Productino/productino.css";
 
 export type PromptFormValues = {
   message: string
@@ -32,13 +34,14 @@ export default function ProductinoPage() {
   })
 
   const onSubmit = async (data: PromptFormValues) => {
-    promptChatBot(data, csrf);
+  await promptChatBot(data, csrf);
 	await fetchConversation();
   }
 
   return (
     <div className='productino-page-wrapper'>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <ConversationHistory/>
+      <form onSubmit={handleSubmit(onSubmit)} id='prompt-form'>
         {/* <input
           type="text"
           placeholder='Ask
@@ -56,6 +59,7 @@ export default function ProductinoPage() {
 						{...field}
 						variant="outlined"
 						fullWidth
+            placeholder='Ask anything'
 						sx={{
 							borderRadius: '25px',
 							'& .MuiOutlinedInput-root': {

@@ -46,6 +46,7 @@ class ChatWithProductino(APIView):
             ai_response = chat_completion.choices[0].message.content
             conversation_history.append({ "role": "assistant", "content": ai_response })
             request.session['conversation_history'] = conversation_history
+            session = request.session.get("conversation_history", [])
 
             return Response({ "message": ai_response }, status=status.HTTP_200_OK)
         except Exception as e:
