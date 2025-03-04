@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchConversation } from "../../services/productinoService";
 import TextMessageComponent from "./TextMessageComponent";
 
@@ -18,6 +18,13 @@ export default function ConversationHistory() {
 
     getConversation();
   }, []);
+
+  // useEffect(() => {
+  //   // Scroll to the bottom when conversationHistory is updated
+  //   if (bottomRef.current) {
+  //     bottomRef.current.scrollIntoView({ behavior: "instant", block: "end" });
+  //   }
+  // }, [conversationHistory])
 
   if (!conversationHistory) {
     return <div>test</div>
