@@ -44,7 +44,6 @@ export default function ProductinoPage() {
 			<ConversationHistory conversationHistory={conversationHistory}/>
 			<PromptForm conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader}/>
 			<div ref={bottomRef}/>
-			{/* <div className="loader"></div> */}
 		</div>
 	);
 }

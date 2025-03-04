@@ -1,6 +1,6 @@
-import { TextField, CircularProgress } from "@mui/material";
+import { TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { fetchConversation, promptChatBot } from "../../services/productinoService";
+import { promptChatBot } from "../../services/productinoService";
 import { useState } from "react";
 import { PromptFormValues } from "../../pages/ProductinoPage";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -33,6 +33,7 @@ const schema = z.object({
         resolver: zodResolver(schema)
     })
 
+    //Function that shows the submit button only when writing in the input and increasing input rows on longer messages
     const handleInputChange = (e) => {
         if (e.target.value.length > 0) {
             setShowSubmitBtn(true);
@@ -51,11 +52,11 @@ const schema = z.object({
         }
     }
 
+    //Submit the message with Enter
     const handleKeyDown = (e) => {
-        // Check if the 'Enter' key (keyCode 13 or 'Enter') is pressed
         if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();  // Prevents creating a new line on Enter key press
-          handleSubmit(onSubmit)();  // Trigger the form submit manually
+          e.preventDefault();
+          handleSubmit(onSubmit)();
         }
     };
     
