@@ -31,20 +31,20 @@ export default function ProductinoPage() {
 
 	const bottomRef = useRef(null);
 
-	useEffect(() => {
-		const getConversation = async() => {
-			await fetchConversation();
-		}
+	const updateConversationHistory = (newMessage: TextMessageType) => {
+		setConversationHistory(prev => [...prev, newMessage]);
+	};
 
-		getConversation();
-	}, [])
-
+	const removeAiLoader = () => {
+		setConversationHistory(prev => prev.slice(0, -1));
+	}
 
 	return (
 		<div className='productino-page-wrapper'>
-		<ConversationHistory conversationHistory={conversationHistory}/>
-		<PromptForm/>
-		<div ref={bottomRef}/>
+			<ConversationHistory conversationHistory={conversationHistory}/>
+			<PromptForm conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader}/>
+			<div ref={bottomRef}/>
+			{/* <div className="loader"></div> */}
 		</div>
 	);
 }

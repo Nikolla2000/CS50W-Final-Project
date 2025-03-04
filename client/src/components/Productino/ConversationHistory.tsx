@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { fetchConversation } from "../../services/productinoService";
+import React from "react";
 import TextMessageComponent from "./TextMessageComponent";
 
 export type TextMessageType = {
   role: 'user' | 'assistant'
-  content: string
+  content: string | React.ReactNode;
 }
 
 export default function ConversationHistory({ conversationHistory } : { conversationHistory: TextMessageType[] | [] }) {

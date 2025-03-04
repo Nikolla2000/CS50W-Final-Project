@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { TextField, CircularProgress } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { fetchConversation, promptChatBot } from "../../services/productinoService";
 import { useState } from "react";
@@ -7,19 +7,29 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../../providers/AuthProvider";
+import { TextMessageType } from "./ConversationHistory";
 
 const schema = z.object({
     message: z.string().min(1).max(2000)
   })
 
-export default function PromptForm() {
+  export default function PromptForm({
+    conversationHistory,
+    setConversationHistory,
+    removeAiLoader,
+  }: {
+    conversationHistory: TextMessageType[];
+    setConversationHistory: (newMessage: TextMessageType) => void;
+    removeAiLoader: () => void;
+  }) {
+
     const [showSubmitBtn, setShowSubmitBtn] = useState<boolean>(false);
     const [inputHeight, setInputHeight] = useState<number>(50);
 
     const authContext = useAuth();
     const { csrf } = authContext;
 
-    const {  control, handleSubmit, formState: { errors } } = useForm<PromptFormValues>({
+    const {  control, handleSubmit, reset, formState: { errors } } = useForm<PromptFormValues>({
         resolver: zodResolver(schema)
     })
 
@@ -41,9 +51,41 @@ export default function PromptForm() {
         }
     }
 
+    const handleKeyDown = (e) => {
+        // Check if the 'Enter' key (keyCode 13 or 'Enter') is pressed
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();  // Prevents creating a new line on Enter key press
+          handleSubmit(onSubmit)();  // Trigger the form submit manually
+        }
+    };
+    
+
     const onSubmit = async (data: PromptFormValues) => {
-        await promptChatBot(data, csrf);
-        await fetchConversation();
+        const newMessage: TextMessageType = { 
+            role: "user",
+            content: data.message 
+        };
+        setConversationHistory(newMessage);
+
+        reset({
+            message: "",
+        });
+
+        const aiRespponseLoading: TextMessageType = { 
+            role: "assistant",
+            content: <div className="loader"></div>
+        };
+        setConversationHistory(aiRespponseLoading);
+
+        const resData = await promptChatBot(data, csrf);
+        const aiReposne: TextMessageType = {
+            role: "assistant",
+            content: resData.message
+        }
+        removeAiLoader();
+        setConversationHistory(aiReposne);
+        // await fetchConversation();
+
     }
 
     return (
@@ -66,6 +108,7 @@ export default function PromptForm() {
                         field.onChange(e);
                         handleInputChange(e);
                     }}
+                    onKeyDown={handleKeyDown}
                     placeholder='Ask anything'
                     sx={{
                         borderRadius: '25px',

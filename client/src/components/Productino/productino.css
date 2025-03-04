@@ -4,13 +4,8 @@
 }
 
 .chat-wrapper {
-  /* width: 60%; */
   margin: 0 auto;
-  /* max-height: 400px;
-  overflow-x: scroll; */
-  /* max-height: 400px;
-  overflow-y: scroll; */
-  margin-bottom: 100px;
+  margin-bottom: 120px;
 }
 
 .text-msg-wrapper {
@@ -28,7 +23,6 @@
 
 .text-msg-assistant {
   display: inline-block;
-  /* padding-bottom: 40px; */
   margin-bottom: 50px;
 }
 
@@ -54,7 +48,6 @@
   cursor: pointer;
   border: none;
   padding: 3px 5px;
-  /* display: none; */
 }
 
 .productino-warning {
@@ -62,3 +55,47 @@
   font-size: 14px;
   color: rgb(80, 80, 80);
 }
+
+
+
+
+/* AI Reponse Loader */
+.loader {
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+  position: relative;
+}
+.loader::after,
+.loader::before {
+  content: '';
+  width: 48px;
+  height: 48px;
+  border: 2px solid #2d76ff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  animation: rotation 2s ease-in-out infinite;
+}
+.loader::after {
+  border-color: #FF3D00;
+  animation-delay: 1s;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+
+
+
+
+
+
+
+
