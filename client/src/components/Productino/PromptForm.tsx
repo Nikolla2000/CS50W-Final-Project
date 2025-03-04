@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../../providers/AuthProvider";
 import { TextMessageType } from "./ConversationHistory";
+import { TypeAnimation } from 'react-type-animation';
 
 const schema = z.object({
     message: z.string().min(1).max(2000)
@@ -81,7 +82,10 @@ const schema = z.object({
         const resData = await promptChatBot(data, csrf);
         const aiReposne: TextMessageType = {
             role: "assistant",
-            content: resData.message
+            content: <TypeAnimation 
+                        sequence={[resData.message]}
+                        speed={80}
+                        cursor={false}/>
         }
         removeAiLoader();
         setConversationHistory(aiReposne);
@@ -120,7 +124,7 @@ const schema = z.object({
                         MozBoxShadow: '0px 0px 13px -3px rgba(0, 0, 0, 0.75)',
                         },
                     }}
-                    helperText={errors.message?.message}
+                    // helperText={errors.message?.message}
                     inputProps={{
                         style: {
                         height: `${inputHeight}px`,
