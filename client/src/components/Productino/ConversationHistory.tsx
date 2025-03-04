@@ -7,24 +7,7 @@ export type TextMessageType = {
   content: string
 }
 
-export default function ConversationHistory() {
-  const [conversationHistory, setConversationHistory] = useState<TextMessageType[]>([]);
-
-  useEffect(() => {
-    const getConversation = async () => {
-        const data = await fetchConversation();
-        setConversationHistory(data);
-    };
-
-    getConversation();
-  }, []);
-
-  // useEffect(() => {
-  //   // Scroll to the bottom when conversationHistory is updated
-  //   if (bottomRef.current) {
-  //     bottomRef.current.scrollIntoView({ behavior: "instant", block: "end" });
-  //   }
-  // }, [conversationHistory])
+export default function ConversationHistory({ conversationHistory } : { conversationHistory: TextMessageType[] | [] }) {
 
   if (!conversationHistory) {
     return <div>test</div>
