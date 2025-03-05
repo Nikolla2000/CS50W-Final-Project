@@ -1,5 +1,6 @@
 import React from "react";
 import TextMessageComponent from "./TextMessageComponent";
+import productinoGif from "../../assets/productino.gif";
 
 export type TextMessageType = {
   role: 'user' | 'assistant'
@@ -11,7 +12,8 @@ export default function ConversationHistory({ conversationHistory } : { conversa
   if (!conversationHistory.length) {
     return (
       <div>
-        <p>Productino AI</p>
+        <h1 className="productiono-heading">Productino AI</h1>
+        <img src={productinoGif} alt="productino ai robot" className="productino-gif"/>
       </div>
     )
   }
