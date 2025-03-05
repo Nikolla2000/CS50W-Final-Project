@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { promptChatBot } from "../../services/productinoService";
+import { fetchConversation, promptChatBot } from "../../services/productinoService";
 import { useState } from "react";
 import { PromptFormValues } from "../../pages/ProductinoPage";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -9,6 +9,7 @@ import { z } from "zod";
 import { useAuth } from "../../providers/AuthProvider";
 import { TextMessageType } from "./ConversationHistory";
 import { TypeAnimation } from 'react-type-animation';
+import api from "../../axiosConfig";
 
 const schema = z.object({
     message: z.string().min(1).max(2000)
@@ -93,6 +94,21 @@ const schema = z.object({
 
     }
 
+    const clearChatHistory = async () => {
+        try {
+            await api.delete("/productino/chat/", {
+                headers: {
+                    "X-CSRFToken": csrf,
+                },
+                withCredentials: true,
+            });
+            const test = await fetchConversation();
+            console.log(test);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     return (
         <div className="prompt-form-wrapper">
             <form onSubmit={handleSubmit(onSubmit)} id='prompt-form'>
@@ -141,6 +157,7 @@ const schema = z.object({
             </div>
             <p className='productino-warning'>Productino can make mistakes. Check important info.</p>
             </form>
+            <button onClick={clearChatHistory}>Clear chat history</button>
         </div>
     )
 }

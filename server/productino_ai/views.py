@@ -57,3 +57,9 @@ class ChatWithProductino(APIView):
         conversation_history = request.session.get("conversation_history", [])
 
         return Response({ "conversation_history": conversation_history }, status=status.HTTP_200_OK)
+    
+
+    def delete(self, request):
+        request.session['conversation_history'] = []
+        request.session.save()
+        return Response({ "message": "Chat history cleared" }, status=status.HTTP_200_OK)

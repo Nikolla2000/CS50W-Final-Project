@@ -8,8 +8,12 @@ export type TextMessageType = {
 
 export default function ConversationHistory({ conversationHistory } : { conversationHistory: TextMessageType[] | [] }) {
 
-  if (!conversationHistory) {
-    return <div>test</div>
+  if (!conversationHistory.length) {
+    return (
+      <div>
+        <p>Productino AI</p>
+      </div>
+    )
   }
 
   return (
