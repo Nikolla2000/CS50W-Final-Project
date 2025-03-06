@@ -110,7 +110,7 @@ const schema = z.object({
     }
 
     return (
-        <div className="prompt-form-wrapper">
+        <div className={`${conversationHistory.length == 0 ? 'prompt-form-wrapper-not-fixed' : 'prompt-form-wrapper' }`}>
             <form onSubmit={handleSubmit(onSubmit)} id='prompt-form'>
             <div style={{ marginBottom: '16px' }}>
                 <Controller
@@ -157,7 +157,7 @@ const schema = z.object({
             </div>
             <p className='productino-warning'>Productino can make mistakes. Check important info.</p>
             </form>
-            <button onClick={clearChatHistory}>Clear chat history</button>
+            {/* <button onClick={clearChatHistory}>Clear chat history</button> */}
         </div>
     )
 }

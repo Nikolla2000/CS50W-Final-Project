@@ -33,6 +33,11 @@
   width: 60%;
 }
 
+.prompt-form-wrapper-not-fixed {
+  position: static;
+  width: 100%;
+}
+
 #prompt-form {
   /* position: fixed;
   bottom:10%;
@@ -63,6 +68,50 @@
   display: block;
 }
 
+.productino-heading {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.productino-greeting {
+  margin-bottom: 25px;
+  color:#4b4b4b;
+  height: 100px;
+}
+
+.example-prompts {
+  margin-bottom: 40px;
+}
+
+.example-prompts .flex-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.example-prompts .flex-item {
+  flex: 1 1 48%;
+}
+
+.example-prompts .flex-container:last-child .flex-item {
+  flex: 1 1 100%;
+}
+
+.example-prompts button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: #4b4b4b;
+  transition: all 0.3s ease;
+}
+
+.example-prompts button:hover { 
+  background-color: #f1f1f1;
+}
 
 
 /* AI Reponse Loader */

@@ -24,7 +24,7 @@ export default function ProductinoPage() {
 
 	useEffect(() => {
 		// Scroll to bottom
-		if (bottomRef.current) {
+		if (bottomRef.current  && conversationHistory.length > 0) {
 			bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
 		}
   	}, [conversationHistory])
