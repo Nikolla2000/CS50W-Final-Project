@@ -11,6 +11,7 @@ export type PromptFormValues = {
 
 export default function ProductinoPage() {
 	const [conversationHistory, setConversationHistory] = useState<TextMessageType[]>([]);
+	const [isAiTyping, setIsAiTyping] = useState<boolean>(false);
 
 	useEffect(() => {
 		const getConversation = async () => {
@@ -42,7 +43,7 @@ export default function ProductinoPage() {
 
 	return (
 		<div className='productino-page-wrapper'>
-			<ConversationHistory conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader}/>
+			<ConversationHistory conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader} isAiTyping={isAiTyping} setIsAiTyping={setIsAiTyping}/>
 			<PromptForm conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader}/>
 			<div ref={bottomRef}/>
 		</div>

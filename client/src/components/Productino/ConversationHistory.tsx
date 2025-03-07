@@ -15,11 +15,15 @@ export default function ConversationHistory({
   conversationHistory,
   setConversationHistory,
   removeAiLoader,
+  isAiTyping,
+  setIsAiTyping,
 } : 
 { 
   conversationHistory: TextMessageType[] | [];
   setConversationHistory: (newMessage: TextMessageType) => void;
   removeAiLoader: () => void;
+  isAiTyping: boolean;
+  setIsAiTyping: (isTyping: boolean) => void;
 }) {
 
   const authContext = useAuth();
@@ -30,6 +34,7 @@ export default function ConversationHistory({
       role: "user",
       content: e.target.innerText
     };
+    setIsAiTyping(true);
     setConversationHistory(newMessage);
 
     const aiResponseLoading: TextMessageType = {
@@ -43,7 +48,7 @@ export default function ConversationHistory({
     const aiResponse: TextMessageType = {
       role: "assistant",
       content: <TypeAnimation 
-                        sequence={[resData.message]}
+                        sequence={[resData.message, 0, () => { alert("done")}]}
                         speed={90}
                         cursor={false}/>
     };
