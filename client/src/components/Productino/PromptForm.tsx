@@ -85,7 +85,7 @@ const schema = z.object({
             role: "assistant",
             content: <TypeAnimation 
                         sequence={[resData.message]}
-                        speed={80}
+                        speed={90}
                         cursor={false}/>
         }
         removeAiLoader();

@@ -42,7 +42,7 @@ export default function ProductinoPage() {
 
 	return (
 		<div className='productino-page-wrapper'>
-			<ConversationHistory conversationHistory={conversationHistory}/>
+			<ConversationHistory conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader}/>
 			<PromptForm conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader}/>
 			<div ref={bottomRef}/>
 		</div>
