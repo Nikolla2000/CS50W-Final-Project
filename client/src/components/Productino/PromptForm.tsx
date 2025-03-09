@@ -70,7 +70,7 @@ const schema = z.object({
 
     const onSubmit = async (data: PromptFormValues) => {
         if (isAiTyping) return;
-        
+
         const newMessage: TextMessageType = { 
             role: "user",
             content: data.message 
@@ -120,7 +120,7 @@ const schema = z.object({
     return (
         <div className={`${conversationHistory.length == 0 ? 'prompt-form-wrapper-not-fixed' : 'prompt-form-wrapper' }`}>
             <form onSubmit={handleSubmit(onSubmit)} id='prompt-form'>
-            <div style={{ marginBottom: '16px' }}>
+            <div style={{ marginBottom: '16px' }} className="input-submit-wrapper">
                 <Controller
                 name="message"
                 control={control}
@@ -146,6 +146,7 @@ const schema = z.object({
                         boxShadow: '0px 0px 13px -3px rgba(0, 0, 0, 0.75)',
                         WebkitBoxShadow: '0px 0px 13px -3px rgba(0, 0, 0, 0.75)',
                         MozBoxShadow: '0px 0px 13px -3px rgba(0, 0, 0, 0.75)',
+                        // position: 'relative'
                         },
                     }}
                     // helperText={errors.message?.message}

@@ -46,8 +46,8 @@
 
 #prompt-submit-btn {
   position: absolute;
-  bottom: 62px;
-  right: 1.5%;
+  bottom: 15%;
+  right: 2%;
   border-radius: 100%;
   background-color: #000;
   cursor: pointer;
@@ -113,6 +113,10 @@
   background-color: #f1f1f1;
 }
 
+.input-submit-wrapper {
+  position: relative;
+}
+
 
 /* AI Reponse Loader */
 .loader {
@@ -145,7 +149,59 @@
   100% {
     transform: rotate(360deg);
   }
-} 
+}
+
+
+
+@media screen and (max-width: 900px) {
+  .productino-page-wrapper {
+    width: 100%;
+  }
+
+  /* .input-submit-wrapper {
+    width: 100%;
+  } */
+
+  .prompt-form-wrapper {
+    width: 95%;
+  }
+
+  .productino-greeting {
+    height: auto;
+  }
+
+  .productino-gif {
+    width: 220px;
+  }
+}
+
+
+@media screen and (max-width: 610px) {
+  .productino-greeting {
+    font-size: 13px;
+  }
+
+  .text-msg-wrapper p {
+    font-size: 14px;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .prompt-form-wrapper {
+    width: 90%;
+  }
+
+  .text-msg-wrapper p {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 286px) {
+  .productino-gif {
+    width: 170px;
+  }
+}
 
 
 
