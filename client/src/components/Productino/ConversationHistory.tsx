@@ -48,7 +48,7 @@ export default function ConversationHistory({
     const aiResponse: TextMessageType = {
       role: "assistant",
       content: <TypeAnimation 
-                        sequence={[resData.message, 0, () => { alert("done")}]}
+                        sequence={[resData.message, () => setIsAiTyping(false)]}
                         speed={90}
                         cursor={false}/>
     };

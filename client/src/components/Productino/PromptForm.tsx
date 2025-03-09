@@ -4,6 +4,7 @@ import { fetchConversation, promptChatBot } from "../../services/productinoServi
 import { useState } from "react";
 import { PromptFormValues } from "../../pages/ProductinoPage";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SquareIcon from '@mui/icons-material/Square';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../../providers/AuthProvider";
@@ -19,10 +20,14 @@ const schema = z.object({
     conversationHistory,
     setConversationHistory,
     removeAiLoader,
+    isAiTyping,
+    setIsAiTyping,
   }: {
     conversationHistory: TextMessageType[];
     setConversationHistory: (newMessage: TextMessageType) => void;
     removeAiLoader: () => void;
+    isAiTyping: boolean;
+    setIsAiTyping: (isTyping: boolean) => void;
   }) {
 
     const [showSubmitBtn, setShowSubmitBtn] = useState<boolean>(false);
@@ -64,6 +69,8 @@ const schema = z.object({
     
 
     const onSubmit = async (data: PromptFormValues) => {
+        if (isAiTyping) return;
+        
         const newMessage: TextMessageType = { 
             role: "user",
             content: data.message 
@@ -78,13 +85,14 @@ const schema = z.object({
             role: "assistant",
             content: <div className="loader"></div>
         };
+        setIsAiTyping(true);
         setConversationHistory(aiRespponseLoading);
 
         const resData = await promptChatBot(data, csrf);
         const aiReposne: TextMessageType = {
             role: "assistant",
             content: <TypeAnimation 
-                        sequence={[resData.message]}
+                        sequence={[resData.message, () => setIsAiTyping(false)]}
                         speed={90}
                         cursor={false}/>
         }
@@ -151,7 +159,7 @@ const schema = z.object({
                 />
                 {showSubmitBtn &&
                 <button type="submit" id='prompt-submit-btn'>
-                    <ArrowUpwardIcon style={{ color: '#fff', fontWeight: 'bold' }} />
+                    {isAiTyping ? <SquareIcon style={{ color: "#fff",  fontSize: '18px', padding: '3px' }}/> : <ArrowUpwardIcon style={{ color: '#fff', fontWeight: 'bold' }} />}
                 </button>
                 }
             </div>
