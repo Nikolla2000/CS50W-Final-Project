@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { fetchConversation } from '../services/productinoService';
 import ConversationHistory, { TextMessageType } from '../components/Productino/ConversationHistory';
 import "../components/Productino/productino.css";
@@ -8,10 +8,20 @@ export type PromptFormValues = {
   message: string
 }
 
+export type ProductinoContextType = {
+  conversationHistory: TextMessageType[];
+  setConversationHistory: React.Dispatch<React.SetStateAction<TextMessageType[]>>;
+  isAiTyping: boolean;
+  setIsAiTyping: (isTyping: boolean) => void;
+  removeAiLoader: () => void;
+};
+
+export const ProductinoContext = createContext<ProductinoContextType | null>(null);
 
 export default function ProductinoPage() {
 	const [conversationHistory, setConversationHistory] = useState<TextMessageType[]>([]);
 	const [isAiTyping, setIsAiTyping] = useState<boolean>(false);
+    const bottomRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		const getConversation = async () => {
@@ -31,8 +41,6 @@ export default function ProductinoPage() {
   	}, [conversationHistory])
 
 
-	const bottomRef = useRef(null);
-
 	const updateConversationHistory = (newMessage: TextMessageType) => {
 		setConversationHistory(prev => [...prev, newMessage]);
 	};
@@ -42,10 +50,20 @@ export default function ProductinoPage() {
 	}
 
 	return (
-		<div className='productino-page-wrapper'>
-			<ConversationHistory conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader} isAiTyping={isAiTyping} setIsAiTyping={setIsAiTyping}/>
-			<PromptForm conversationHistory={conversationHistory} setConversationHistory={updateConversationHistory} removeAiLoader={removeAiLoader} isAiTyping={isAiTyping} setIsAiTyping={setIsAiTyping}/>
-			<div ref={bottomRef}/>
-		</div>
-	);
+        <ProductinoContext.Provider
+          value={{
+            conversationHistory,
+            setConversationHistory: updateConversationHistory,
+            isAiTyping,
+            setIsAiTyping,
+            removeAiLoader,
+          }}
+        >
+          <div className="productino-page-wrapper">
+            <ConversationHistory />
+            <PromptForm />
+            <div ref={bottomRef} />
+          </div>
+        </ProductinoContext.Provider>
+      );
 }
