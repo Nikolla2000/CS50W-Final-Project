@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import TextMessageComponent from "./TextMessageComponent";
 import productinoGif from "../../assets/productino.gif";
 import { TypeAnimation } from "react-type-animation";
 import { promptChatBot } from "../../services/productinoService";
 import { useAuth } from "../../providers/AuthProvider";
+import { ProductinoContext } from "../../pages/ProductinoPage";
 
 export type TextMessageType = {
   role: 'user' | 'assistant'
@@ -11,28 +12,21 @@ export type TextMessageType = {
 }
 
 
-export default function ConversationHistory({ 
-  conversationHistory,
-  setConversationHistory,
-  removeAiLoader,
-  isAiTyping,
-  setIsAiTyping,
-} : 
-{ 
-  conversationHistory: TextMessageType[] | [];
-  setConversationHistory: (newMessage: TextMessageType) => void;
-  removeAiLoader: () => void;
-  isAiTyping: boolean;
-  setIsAiTyping: (isTyping: boolean) => void;
-}) {
-
+export default function ConversationHistory() {
   const authContext = useAuth();
   const { csrf } = authContext;
+  const context = useContext(ProductinoContext);
+
+  if (!context) {
+    throw new Error("ConversationHistory must be used within a ProductinoContext.Provider");
+  }
+
+  const { conversationHistory, setConversationHistory, removeAiLoader, isAiTyping, setIsAiTyping } = context;
   
-  const handleSubmitExamplePrompt = async (e) => {
+  const handleSubmitExamplePrompt = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const newMessage: TextMessageType = {
       role: "user",
-      content: e.target.innerText
+      content: e.currentTarget.innerText
     };
     setIsAiTyping(true);
     setConversationHistory(newMessage);
@@ -43,8 +37,9 @@ export default function ConversationHistory({
     };
     setConversationHistory(aiResponseLoading);
 
-    const data = { message: e.target.innerText };
+    const data = { message: e.currentTarget.innerText };
     const resData = await promptChatBot(data, csrf);
+
     const aiResponse: TextMessageType = {
       role: "assistant",
       content: <TypeAnimation 
