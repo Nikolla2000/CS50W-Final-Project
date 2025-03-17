@@ -9,6 +9,7 @@ import RegisterPage from './pages/RegisterPage.tsx'
 import { AuthProvider } from './providers/AuthProvider.tsx'
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute.tsx'
 import routes from './utils/routes.tsx'
+import AddGoalForm from './components/Goals/AddGoalForm.tsx'
 
 const router = createBrowserRouter([
   ...routes.map((route) => ({
@@ -22,6 +23,17 @@ const router = createBrowserRouter([
     ),
     errorElement: <NotFoundPage />,
   })),
+  {
+    path: '/addgoal',
+    element: (
+      <Layout>
+        <ProtectedRoute>
+          <AddGoalForm/>
+        </ProtectedRoute>
+      </Layout>
+    ),
+    errorElement: <NotFoundPage />,
+  },
   {
     path: '/login',
     element: <LoginPage />,
