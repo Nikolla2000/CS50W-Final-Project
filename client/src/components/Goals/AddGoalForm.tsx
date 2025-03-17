@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 export type GoalsData = {
     description: string;
     deadline: Date;
+    is_completed: boolean;
 }
 
 const schema = z.object({

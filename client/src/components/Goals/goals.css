@@ -1,3 +1,24 @@
 .addGoalTitle {
     text-align: center;
 }
+
+
+.goal-card-wrapper {
+    transition: all 0.3s ease;
+  }
+  
+  .goal-card-wrapper:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .goal-card-wrapper .description {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  
+  .goal-card-wrapper .deadline {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  

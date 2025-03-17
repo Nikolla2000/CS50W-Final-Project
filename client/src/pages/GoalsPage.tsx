@@ -29,9 +29,11 @@ export default function GoalsPage() {
       <button>
         <Link to={'/addgoal'}>+ New Goal</Link>
       </button>
-      {goals.map((goal, index) => (
-        <GoalCard goal={goal} key={index}/>
-      ))}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+        {goals.map((goal, index) => (
+          <GoalCard goal={goal} key={index} />
+        ))}
+      </div>
     </div>
   );
 }
