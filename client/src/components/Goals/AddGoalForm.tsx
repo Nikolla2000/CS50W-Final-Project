@@ -4,7 +4,14 @@ import { TextField, Typography, Box } from '@mui/material';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GreenButton } from '../Button/Button';
+import { useAuth } from '../../providers/AuthProvider';
+import { fetchAddNewGoal } from '../../services/goalsService';
+import { useNavigate } from 'react-router-dom';
 
+export type GoalsData = {
+    description: string;
+    deadline: Date;
+}
 
 const schema = z.object({
   description: z.string().min(1, 'Goal description is required'),
@@ -17,9 +24,22 @@ export default function AddGoalForm() {
     const { control, handleSubmit, formState: { errors } } = useForm({
       resolver: zodResolver(schema),
     });
+
+    const authContext = useAuth();
+    const { csrf } = authContext;
+
+    const navigate = useNavigate();
   
-    const onSubmit = (data) => {
-      console.log('New Goal Submitted:', data);
+    const onSubmit = async (data: GoalsData) => {
+      try {
+        const res = await fetchAddNewGoal(data, csrf);
+
+        if(res) {
+            navigate("/goals");
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
   
     return (
