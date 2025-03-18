@@ -1,0 +1,9 @@
+.add-new-button {
+    /* background: radial-gradient(circle at 0.9% 49.5%, rgb(0, 250, 255) 0%, rgb(2, 255, 187) 100.2%); */
+    background: radial-gradient(993px at 0.5% 98.5%, rgb(0, 239, 247) 0%, rgb(0, 122, 147) 46.7%, rgb(0, 29, 72) 100.2%);
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 30px;
+    padding:  5px 15px;
+}

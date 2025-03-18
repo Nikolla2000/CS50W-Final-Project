@@ -1,10 +1,9 @@
 import React from 'react';
 import { Card, CardContent, Typography, Chip, Box } from '@mui/material';
 import { GoalsData } from './AddGoalForm';
-import { formatDistanceToNow } from 'date-fns'; // To format deadline in a human-readable way (e.g., "3 days left")
+import { formatDistanceToNow } from 'date-fns';
 
 export default function GoalCard({ goal }: { goal: GoalsData }) {
-  // Format deadline (e.g., "in 3 days")
   const formattedDeadline = formatDistanceToNow(new Date(goal.deadline), { addSuffix: true });
 
   return (
