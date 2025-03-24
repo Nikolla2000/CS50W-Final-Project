@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Chip, Box } from '@mui/material';
 import { GoalsData } from './AddGoalForm';
 import { formatDistanceToNow } from 'date-fns';
 
-export default function GoalCard({ goal }: { goal: GoalsData }) {
+export default function GoalCard({ goal, handleOpenModal }: { goal: GoalsData; handleOpenModal: () => void }) {
   const formattedDeadline = formatDistanceToNow(new Date(goal.deadline), { addSuffix: true });
 
   return (
@@ -24,12 +24,13 @@ export default function GoalCard({ goal }: { goal: GoalsData }) {
     //     </Box>
     //   </CardContent>
     // </Card>
-    <div className="goal-card-wrapper">
+    <div className="goal-card-wrapper" onClick={handleOpenModal}>
         <h5>
             {goal.description}
         </h5>
-        <p>Deadlinbg : {formattedDeadline}</p>
-        <div className='goal-details'></div>
+        <p>Until : {new Date(goal.deadline).toLocaleDateString()}</p>
+        <p>({formattedDeadline})</p>
+        <div className='goal-completion-details'></div>
     </div>
   );
 }
