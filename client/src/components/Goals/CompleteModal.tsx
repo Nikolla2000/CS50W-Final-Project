@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import { GoalsData } from './AddGoalForm';
-import api from '../../axiosConfig';
 import { completeGoal } from '../../services/goalsService';
 
 const style = {
@@ -13,7 +12,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 420,
-  bgcolor: 'rgba(255, 255, 255, 0.55)', // Glass effect
+  bgcolor: 'rgba(255, 255, 255, 0.55)',
   backdropFilter: 'blur(10px)',
   border: 'none',
   borderRadius: "15px",
