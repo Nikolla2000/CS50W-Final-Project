@@ -18,16 +18,16 @@ export default function GoalCard({ goal, handleOpenModal }: { goal: GoalsData; h
 
   return (
     <div className="goal-card-wrapper" onClick={handleOpenModal}>
-    <h5>{goal.description}</h5>
-    <p>Until: {new Date(goal.deadline).toLocaleDateString()}</p>
-    <p>({formattedDeadline})</p>
-    <div className='goal-completion-details' style={{ position: "relative"}}>
-      <Chip 
-        label={status} 
-        color={status === 'Completed ✅' ? 'success' : status === 'In Progress..' ? 'warning' : 'error'}
-        sx={{ width: 'fit-content', margin: "15px 0" }} 
-      />
+      <h5 className="goal-description">{goal.description}</h5>
+      <p className="goal-deadline">Until: {new Date(goal.deadline).toLocaleDateString()}</p>
+      <p className="goal-formatted-time">({formattedDeadline})</p>
+      <div className="goal-completion-details">
+        <Chip 
+          label={status} 
+          color={status === 'Completed ✅' ? 'success' : status === 'In Progress..' ? 'warning' : 'error'}
+          sx={{ width: 'fit-content', margin: '10px 0', fontWeight: 'bold' }} 
+        />
+      </div>
     </div>
-  </div>
   );
 }

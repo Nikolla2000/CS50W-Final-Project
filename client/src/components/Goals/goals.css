@@ -1,54 +1,67 @@
-/* .addGoalTitle {
-    text-align: center;
-}
-
-
 .goal-card-wrapper {
-    transition: all 0.3s ease;
+    border-radius: 15px;
+    border:1px solid rgb(0, 0, 0, 0.3);
+    padding: 20px 30px;
+    margin: 20px auto;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, #f1f1f1, #dfe6e9);
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    max-width: 350px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
   }
   
   .goal-card-wrapper:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+  }
+  
+  .goal-description {
+    font-size: 1.1em;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #2d3436;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .goal-description:hover {
+    color: #00b894;
+  }
+  
+  .goal-deadline {
+    font-size: 0.9em;
+    color: #636e72;
+    margin-bottom: 5px;
+  }
+  
+  .goal-formatted-time {
+    font-size: 0.85em;
+    color: #8f979b;
+    margin-bottom: 15px;
+  }
+  
+  .goal-completion-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .goal-completion-details .MuiChip-root {
+    border-radius: 12px;
+    padding: 8px 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+  }
+  
+  .goal-completion-details .MuiChip-root:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
-  .goal-card-wrapper .description {
-    font-size: 1.1rem;
-    font-weight: bold;
-  }
-  
-  .goal-card-wrapper .deadline {
-    color: #666;
-    font-size: 0.9rem;
-  }
-   */
-
-
-
-.goal-card-wrapper {
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  border-radius: 10px;
-  padding: 10px 30px;
-  margin:0 auto;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.goal-card-wrapper:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.goal-card-wrapper h5 {
-  text-align: center;
-  font-size: 1em;
-}
-
-.close-icon {
-  color: #b4b4b4;
-  position: absolute;
-  top:5px;
-  right: 10px;
-  cursor: pointer;
-}
