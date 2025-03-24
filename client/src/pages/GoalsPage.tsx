@@ -11,7 +11,11 @@ export default function GoalsPage() {
 
   //Modal state
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const [selectedGoal, setSelectedGoal] = useState<GoalsData | null>(null);
+  const handleOpen = (goal: GoalsData) => {
+    setSelectedGoal(goal);
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   useEffect( () => { 
@@ -24,9 +28,6 @@ export default function GoalsPage() {
     getAllGoals();
   }, [])
 
-  const handleOpenCompleteModal = () => {
-
-  }
 
   // if (!goals.length) {
   //   return (
@@ -43,10 +44,10 @@ export default function GoalsPage() {
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
         {goals.map((goal, index) => (
-            <GoalCard goal={goal} key={index} handleOpenModal={handleOpen}/>
+            <GoalCard goal={goal} key={index} handleOpenModal={() =>handleOpen(goal)}/>
         ))}
       </div>
-      <CompleteModal open={open} handleOpen={handleOpen} handleClose={handleClose}/>
+      <CompleteModal open={open} handleClose={handleClose} goal={selectedGoal}/>
     </div>
   );
 }
