@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import { GoalsData } from './AddGoalForm';
+import api from '../../axiosConfig';
+import { completeGoal } from '../../services/goalsService';
 
 const style = {
   position: 'absolute',
@@ -21,7 +23,24 @@ const style = {
   color: "#333",
 };
 
-export default function CompleteModal({ open, handleClose, goal }: { open: boolean; handleClose: () => void; goal: GoalsData | null }) {
+export default function CompleteModal({ open, handleClose, goal }: { 
+    open: boolean;
+    handleClose: () => void;
+    goal: GoalsData | null;
+  }) {
+
+  const handleCompleteGoal = async () => {
+    if (!goal) return;
+
+    try {
+      await completeGoal(goal.id);
+      handleClose();
+    } catch (error) {
+      
+    }
+    handleClose
+  }
+
   return (
     <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box sx={style}>
@@ -51,7 +70,7 @@ export default function CompleteModal({ open, handleClose, goal }: { open: boole
               transition: "0.3s",
               "&:hover": { transform: "scale(1.05)", background: "#00e676" }
             }}
-            onClick={() => console.log("Yes Clicked")}
+            onClick={handleCompleteGoal}
           >
             ✅ Yes
           </Button>

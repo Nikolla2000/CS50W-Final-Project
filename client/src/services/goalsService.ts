@@ -25,3 +25,14 @@ export const fetchAddNewGoal = async (data: GoalsData, csrfToken: string | null)
         console.log(err);
     }
 }
+
+export const completeGoal = async (goalId: string) => {
+    try {
+        const res = await api.patch(`/api/goals/${goalId}/complete/`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}

@@ -12,6 +12,7 @@ export type GoalsData = {
     description: string;
     deadline: Date;
     is_completed: boolean;
+    id: string;
 }
 
 const schema = z.object({

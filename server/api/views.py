@@ -44,3 +44,21 @@ class Goals(APIView):
 
         serializer = GoalSerializer(new_goal)
         return Response({"message": "Goal added successfully", "goal": serializer.data}, status=status.HTTP_201_CREATED)
+    
+
+    def patch(self, request, goal_id):
+        if not request.user.is_authenticated:
+            return Response({"message": "You must be signed in to use this feature"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        try:
+            goal = Goal.objects.get(id=goal_id, user=request.user)
+        except Goal.DoesNotExist:
+            return Response({"message": "Goal not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        goal.is_completed = True
+        goal.save()
+
+        serializer = GoalSerializer(goal)
+        return Response({"message": "Goal marked as completed", "goal": serializer.data}, status=status.HTTP_200_OK)
+        
+
