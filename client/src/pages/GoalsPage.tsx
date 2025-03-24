@@ -5,9 +5,11 @@ import { fetchGoals } from '../services/goalsService';
 import GoalCard from '../components/Goals/GoalCard';
 import AddNewButton from '../components/AddNewButton/AddNewButton';
 import CompleteModal from "../components/Goals/CompleteModal";
+import { Box, CircularProgress } from "@mui/material";
 
 export default function GoalsPage() {
   const [goals, setGoals] = useState<GoalsData[] | []>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   //Modal state
   const [open, setOpen] = useState(false);
@@ -18,36 +20,45 @@ export default function GoalsPage() {
   };
   const handleClose = () => setOpen(false);
 
-  useEffect( () => { 
+  useEffect(() => { 
     const getAllGoals = async () => {
-      const data = await fetchGoals();
-      console.log(data);
-      setGoals(data);
+      try {
+        const data = await fetchGoals();
+        setGoals(data);
+      } catch (error) {
+        console.error("Failed to fetch goals", error);
+      } finally {
+        setLoading(false);
+      }
     }
 
     getAllGoals();
-  }, [])
+  }, []);
 
-
-  // if (!goals.length) {
-  //   return (
-  //   <div>Loading...</div>
-  //   )
-  // }
 
   return (
     <div>
-      {/* <button>
-        <Link to={'/addgoal'}>+ New Goal</Link>
-      </button> */}
       <AddNewButton link='/addgoal'>New Goal</AddNewButton>
-      
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-        {goals.map((goal, index) => (
-            <GoalCard goal={goal} key={index} handleOpenModal={() =>handleOpen(goal)}/>
-        ))}
-      </div>
-      <CompleteModal open={open} handleClose={handleClose} goal={selectedGoal}/>
+
+      {!loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
+          <div className="loader"></div>
+        </Box>
+      ) : (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
+          {goals.length > 0 ? (
+            goals.map((goal, index) => (
+              <GoalCard goal={goal} key={index} handleOpenModal={() => handleOpen(goal)} />
+            ))
+          ) : (
+            <p style={{ textAlign: 'center', color: '#777', fontSize: '1.2rem' }}>
+              No goals found. Start by adding a new goal!
+            </p>
+          )}
+        </div>
+      )}
+
+      <CompleteModal open={open} handleClose={handleClose} goal={selectedGoal} />
     </div>
   );
 }
