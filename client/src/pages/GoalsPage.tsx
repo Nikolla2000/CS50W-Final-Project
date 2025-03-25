@@ -5,13 +5,13 @@ import { fetchGoals } from "../services/goalsService";
 import GoalCard from "../components/Goals/GoalCard";
 import AddNewButton from "../components/AddNewButton/AddNewButton";
 import CompleteModal from "../components/Goals/CompleteModal";
-import { Box, CircularProgress, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import { Box, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 export default function GoalsPage() {
   const [goals, setGoals] = useState<GoalsData[]>([]);
   const [filteredGoals, setFilteredGoals] = useState<GoalsData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [filter, setFilter] = useState<string>("all");
+  const [filter, setFilter] = useState<string>("in-progress");
 
   // Modal state
   const [open, setOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function GoalsPage() {
   }, [filter, goals]);
 
   return (
-    <div>
+    <div className="goals-page-wrapper">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <FormControl 
           sx={{
@@ -87,7 +87,7 @@ export default function GoalsPage() {
 
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
-          <CircularProgress size={60} />
+          <div className="loader"></div>
         </Box>
       ) : (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center" }}>

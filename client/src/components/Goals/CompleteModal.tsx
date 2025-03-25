@@ -5,6 +5,8 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import { GoalsData } from './AddGoalForm';
 import { completeGoal } from '../../services/goalsService';
+import { useAuth } from '../../providers/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -28,16 +30,21 @@ export default function CompleteModal({ open, handleClose, goal }: {
     goal: GoalsData | null;
   }) {
 
+  const authContext = useAuth();
+  const { csrf } = authContext;
+
+  const navigate = useNavigate();
+
   const handleCompleteGoal = async () => {
     if (!goal) return;
 
     try {
-      await completeGoal(goal.id);
+      await completeGoal(goal.id, csrf);
       handleClose();
-    } catch (error) {
-      
+      navigate("/goals");
+    } catch (err) {
+      console.log(err);
     }
-    handleClose
   }
 
   return (

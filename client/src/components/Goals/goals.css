@@ -1,3 +1,10 @@
+.goals-page-wrapper {
+    background: url("../../assets/white-bg.avif");
+    background-size: contain;
+    background-repeat: repeat;
+    min-height: 100vh;
+}
+
 .goal-card-wrapper {
     border-radius: 15px;
     border:1px solid rgb(0, 0, 0, 0.3);

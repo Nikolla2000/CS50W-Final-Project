@@ -3,20 +3,20 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Goal
 from .serializers import GoalSerializer
 
 class Goals(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         goals = Goal.objects.filter(user=request.user)
         serializer = GoalSerializer(goals, many=True)
         return Response({"goals": serializer.data}, status=status.HTTP_200_OK)
     
-    def post(self, request):
-        if not request.user.is_authenticated:
-            return Response({"message": "You must be signed in to use this feature"}, status=status.HTTP_401_UNAUTHORIZED)
-        
+    def post(self, request):   
         description = request.data.get("description")
         deadline_str = request.data.get("deadline")
 
@@ -46,10 +46,7 @@ class Goals(APIView):
         return Response({"message": "Goal added successfully", "goal": serializer.data}, status=status.HTTP_201_CREATED)
     
 
-    def patch(self, request, goal_id):
-        if not request.user.is_authenticated:
-            return Response({"message": "You must be signed in to use this feature"}, status=status.HTTP_401_UNAUTHORIZED)
-        
+    def patch(self, request, goal_id):    
         try:
             goal = Goal.objects.get(id=goal_id, user=request.user)
         except Goal.DoesNotExist:
