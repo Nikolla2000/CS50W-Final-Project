@@ -18,3 +18,6 @@ class Task(models.Model):
     description = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     is_completed = models.BooleanField(blank=True, null=True, default=False)
+
+    def __str__(self):
+        return f"{self.date}: {self.description}"
