@@ -33,3 +33,46 @@ class Tasks(APIView):
         
         serializer = TaskSerializer(new_task)
         return Response({"message": "Task added successfully", "task": serializer.data}, status=status.HTTP_201_CREATED)
+    
+class TaskDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, task_id, user):
+        try:
+            return Task.objects.get(id=task_id, user=user)
+        except Task.DoesNotExist:
+            return None
+
+    def get(self, request, task_id):
+        task = self.get_object(task_id, request.user)
+
+        if not task:
+            return Response({ "message": "Task not found" }, status=status.HTTP_404_NOT_FOUND)
+        serialier = TaskSerializer(task)
+        return Response({ "task": serialier.data }, status=status.HTTP_200_OK)
+    
+
+    def patch(self, request, task_id):
+        task = self.get_object(task_id, request.user)
+
+        if not task:
+            return Response({ "message": "Task not found" }, status=status.HTTP_404_NOT_FOUND)
+        
+        task.is_completed = True
+        task.save()
+
+        serializer = TaskSerializer(task)
+        return Response(
+            {"message": "Task marked as completed", "task": serializer.data}, status=status.HTTP_200_OK)
+
+
+    def delete(self, request, task_id):
+        task = self.get_object(task_id, request.user)
+
+        if not task:
+            return Response({ "message": "Task not found" }, status=status.HTTP_404_NOT_FOUND)
+        
+        task.delete()
+        return Response({"message": "Task deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+

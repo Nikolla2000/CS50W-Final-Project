@@ -14,7 +14,7 @@ class Goal(models.Model):
     
 
 class Task(models.Model):
-    user = models.ForeignObject(User, on_delete=models.CASCADE, related_name='tasks')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
     description = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     is_completed = models.BooleanField(blank=True, null=True, default=False)
