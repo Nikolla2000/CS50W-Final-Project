@@ -11,3 +11,10 @@ class Goal(models.Model):
 
     def __str__(self):
         return f"{self.description} until {self.deadline}"
+    
+
+class Task(models.Model):
+    user = models.ForeignObject(User, on_delete=models.CASCADE, related_name='tasks')
+    description = models.CharField(max_length=200)
+    date = models.DateField(auto_now_add=True)
+    is_completed = models.BooleanField(blank=True, null=True, default=False)
