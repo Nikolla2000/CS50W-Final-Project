@@ -11,7 +11,15 @@ class Tasks(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        tasks = Task.objects.filter(user=request.user)
+        date_str = request.query_params.get("date")
+
+        if date_str:
+            try:
+                 date = timezone.datetime.strptime(date_str, "%Y-%m-%d").date()
+            except ValueError:
+                return Response({"message": "Invalid date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+            
+        tasks = Task.objects.filter(user=request.user, date=date)
         serializer = TaskSerializer(tasks, many=True)
 
         return Response({ "tasks": serializer.data}, status=status.HTTP_200_OK )
