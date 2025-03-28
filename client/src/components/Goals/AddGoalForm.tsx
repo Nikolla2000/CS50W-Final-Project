@@ -1,4 +1,4 @@
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { TextField, Typography, Box } from '@mui/material';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,10 +8,10 @@ import { fetchAddNewGoal } from '../../services/goalsService';
 import { useNavigate } from 'react-router-dom';
 
 export type GoalsData = {
+    id?: string;
     description: string;
     deadline: Date;
-    is_completed: boolean;
-    id: string;
+    is_completed?: boolean;
 }
 
 const schema = z.object({
@@ -22,16 +22,16 @@ const schema = z.object({
 });
 
 export default function AddGoalForm() {
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm<GoalsData>({
       resolver: zodResolver(schema),
     });
 
-    const authContext = useAuth();
+    const authContext = useAuth() ?? { csrf: null, isAuthenticated: false, setIsAuthenticated: () => {} };
     const { csrf } = authContext;
 
     const navigate = useNavigate();
   
-    const onSubmit = async (data: GoalsData) => {
+    const onSubmit: SubmitHandler<GoalsData> = async (data: GoalsData) => {
       try {
         const res = await fetchAddNewGoal(data, csrf);
 

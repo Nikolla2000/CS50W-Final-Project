@@ -1,15 +1,16 @@
 import { TextField } from "@mui/material";
-import { Controller, appendErrors, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { GreenButton } from "../Button/Button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../../providers/AuthProvider";
+import { fetchAddNewTask } from "../../services/taskService";
 
 export type TaskData = {
-    id: number;
+    id?: string;
     description: string;
-    date: Date;
-    is_completed: boolean;
+    date?: Date;
+    is_completed?: boolean;
 }
 
 const schema = z.object({
@@ -17,14 +18,17 @@ const schema = z.object({
 })
 
 export default function AddTaskForm() {
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm<TaskData>({
         resolver: zodResolver(schema),
+        defaultValues: {
+            description: "",
+        },
     })
 
-    const authContext = useAuth();
+    const authContext = useAuth() ?? { csrf: null, isAuthenticated: false, setIsAuthenticated: () => {} };
     const { csrf } = authContext;
 
-    const onSubmit = async (data: TaskData) => {
+    const onSubmit: SubmitHandler<TaskData> = async (data: TaskData) => {
         try {
             const res = await fetchAddNewTask(data, csrf);
         } catch (err) {
@@ -38,6 +42,7 @@ export default function AddTaskForm() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Controller
                     name="description"
+                    control={control}
                     render={({ field }) => (
                         <TextField
                         {...field}
