@@ -54,6 +54,15 @@ export default function AddTaskForm({ onTaskAdd }: { onTaskAdd: () => void } ) {
                         margin="normal"
                         error={!!errors.description}
                         helperText={errors.description?.message}
+                        sx={{
+                            backgroundColor: "white", // Ensures the background is white
+                            "& .MuiOutlinedInput-root": {
+                                backgroundColor: "white", // White background for input area
+                            },
+                            "& .MuiInputBase-input": {
+                                backgroundColor: "white", // Ensures text area has white bg
+                            }
+                        }}
                         />
                     )}>
 

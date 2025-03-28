@@ -1,8 +1,12 @@
 .goals-page-wrapper {
-    background: url("../../assets/white-bg.avif");
-    background-size: contain;
-    background-repeat: repeat;
     min-height: 100vh;
+    padding:10px;
+}
+
+.css-kh0550 {
+  background: url("../../assets/white-bg.avif");
+  background-size: contain;
+  background-repeat: repeat;
 }
 
 .goal-card-wrapper {
