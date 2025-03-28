@@ -17,8 +17,8 @@ const schema = z.object({
     description: z.string().min(1, 'This field is required').max(200, 'Task description can\'t be longer than 200 characters')
 })
 
-export default function AddTaskForm() {
-    const { control, handleSubmit, formState: { errors } } = useForm<TaskData>({
+export default function AddTaskForm({ onTaskAdd }: { onTaskAdd: () => void } ) {
+    const { control, handleSubmit, formState: { errors }, reset } = useForm<TaskData>({
         resolver: zodResolver(schema),
         defaultValues: {
             description: "",
@@ -31,6 +31,8 @@ export default function AddTaskForm() {
     const onSubmit: SubmitHandler<TaskData> = async (data: TaskData) => {
         try {
             const res = await fetchAddNewTask(data, csrf);
+            reset();
+            onTaskAdd();
         } catch (err) {
             console.log(err);
         }

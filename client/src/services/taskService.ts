@@ -1,6 +1,19 @@
 import api from "../axiosConfig";
 import { TaskData } from "../components/Tasks/AddTaskForm";
 
+export const fetchTasks = async() => {
+    try {
+        const currentDate = new Date().toISOString().split("T")[0];
+        const res = await api.get(`/api/tasks/?date=${currentDate}`, {
+            withCredentials: true,
+        });
+        return res.data.tasks;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
 export const fetchAddNewTask = async (data: TaskData, csrfToken:  string | null) => {
     try {
         const res = await api.post("/api/tasks/", data, {
