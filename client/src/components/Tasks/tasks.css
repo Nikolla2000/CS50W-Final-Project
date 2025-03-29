@@ -1,48 +1,60 @@
-/* .tasks-container {
+.tasks-page-wrapper {
     display: flex;
-    gap: 20px;
+    justify-content: center;
     align-items: flex-start;
-    justify-content: space-around;
-} */
-
-/* Ensure that on smaller screens, they stack */
-/* @media (max-width: 768px) {
-    .tasks-container {
-        flex-direction: column;
-        align-items: center;
-    }
+    gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+    flex-wrap: wrap;
 }
 
-.tasks-list {
+.tasks-container {
     flex: 1;
-    min-width: 300px;
+    min-width: 350px;
+    max-width: 600px;
 }
 
-.no-tasks-text {
+
+.tasks-heading {
+    font-weight: bold;
+    color: #333;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #2d89ff;
+    width: 70%;
+}
+
+.no-tasks-message {
     text-align: center;
     color: #777;
     font-size: 1.2rem;
-} */
-
-.tasks-page-wrapper {
-    min-height: 100vh;
-    /* display: flex; */
-    padding:30px;
-    /* justify-content:center; */
-    /*  */
+    margin-top: 20px;
 }
 
 
-.css-kh0550 {
+.add-task-form-container {
+    width: 350px;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.add-task-heading {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid rgba(34, 197, 94, 0.8);
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* .css-kh0550 {
     background: url("../../assets/white-bg.avif");
     background-size: contain;
     background-repeat: repeat;
-}
+} */
 
-
-.tasks-list {
-    /* width: 70%; */
-}
 
 
 

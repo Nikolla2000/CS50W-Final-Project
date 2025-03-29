@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { GreenButton } from "../Button/Button";
 import { z } from "zod";
@@ -40,7 +40,9 @@ export default function AddTaskForm({ onTaskAdd }: { onTaskAdd: () => void } ) {
 
     return (
         <div className="add-task-form-wrapper">
-            <h3>Add New Task</h3>
+            <Typography variant="h4" className="add-task-heading" sx={{ fontSize: "1.7rem", fontWeight: "", marginBottom: "20px" }}>
+                ➕ Add a New Task
+            </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Controller
                     name="description"
@@ -55,12 +57,12 @@ export default function AddTaskForm({ onTaskAdd }: { onTaskAdd: () => void } ) {
                         error={!!errors.description}
                         helperText={errors.description?.message}
                         sx={{
-                            backgroundColor: "white", // Ensures the background is white
+                            backgroundColor: "white",
                             "& .MuiOutlinedInput-root": {
-                                backgroundColor: "white", // White background for input area
+                                backgroundColor: "white",
                             },
                             "& .MuiInputBase-input": {
-                                backgroundColor: "white", // Ensures text area has white bg
+                                backgroundColor: "white",
                             }
                         }}
                         />

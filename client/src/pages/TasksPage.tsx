@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AddTaskForm, { TaskData } from "../components/Tasks/AddTaskForm";
 import TaskCard from "../components/Tasks/TaskCard";
 import { fetchTasks } from "../services/taskService";
-import { Box } from "@mui/system";
+import { Box, Typography } from "@mui/material";
 import "../components/Tasks/tasks.css";
 
 export default function TasksPage() {
@@ -18,34 +18,37 @@ export default function TasksPage() {
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         getTasks();
-    }, [])
+    }, []);
 
     return (
-        <div className="tasks-page-wrapper">
+        <Box className="tasks-page-wrapper" display="flex" gap={4} justifyContent="center">
             {loading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
                     <div className="loader"></div>
                 </Box>
             ) : (
-            <div className="tasks-list">
-                {tasks.length > 0 ? (
-                    tasks.map((task, index) => (
-                        <TaskCard task={task} key={index}/>
-                    ))
+                <Box className="tasks-container">
+                    <Typography variant="h4" className="tasks-heading" sx={{ marginBottom: "20px", fontSize: "1.7rem",}}>
+                        📝 Today's Tasks
+                    </Typography>
 
-                ) : (
-                    <p style={{ textAlign: "center", color: "#777", fontSize: "1.2rem" }}>
-                    No tasks for this day.
-                  </p>  
-                )}
-            </div>
-
+                    {tasks.length > 0 ? (
+                        tasks.map((task, index) => <TaskCard task={task} key={index} />)
+                    ) : (
+                        <Typography className="no-tasks-message">
+                            No tasks for today.
+                        </Typography>
+                    )}
+                </Box>
             )}
-            <AddTaskForm onTaskAdd={getTasks}/>
-        </div>
+
+            <Box className="add-task-form-container">
+                <AddTaskForm onTaskAdd={getTasks} />
+            </Box>
+        </Box>
     );
 }
