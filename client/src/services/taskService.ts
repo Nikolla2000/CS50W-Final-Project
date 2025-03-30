@@ -27,3 +27,19 @@ export const fetchAddNewTask = async (data: TaskData, csrfToken:  string | null)
         console.log(err);
     }
 }
+
+
+export const fetchDeleteTask = async (taskId: string, csrfToken: string | null) => {
+    try {
+        const res = await api.delete(`/api/tasks/${taskId}/`, 
+        {
+            headers: {
+                "X-CSRFToken": csrfToken,
+            },
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}
