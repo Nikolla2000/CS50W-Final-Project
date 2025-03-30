@@ -39,7 +39,7 @@ export default function TasksPage() {
                     {tasks.length > 0 ? (
                         tasks.map((task, index) => <TaskCard task={task} key={index} />)
                     ) : (
-                        <Typography className="no-tasks-message">
+                        <Typography className="no-tasks-message" sx={{textAlign: 'left', fontSize: '1.2em' }}>
                             No tasks for today.
                         </Typography>
                     )}

@@ -112,3 +112,36 @@
 .delete-btn svg {
     color: #ef4444;
 }
+
+
+
+@media screen and (max-width: 836px) {
+    .tasks-heading {
+        width: 100%;
+    }
+
+    .tasks-container {
+        min-width: 0px;
+        max-width: none;
+        width: 100%;
+    }
+
+    .add-task-form-container {
+        min-width: 0px;
+        max-width: none;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .tasks-page-wrapper {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    .task-actions {
+        gap: 0;
+    }
+}
+
