@@ -5,7 +5,7 @@ import { fetchDeleteTask } from "../../services/taskService";
 import { useAuth } from "../../providers/AuthProvider";
 import 'animate.css';
 
-export default function TaskCard({ task, onTaskDelete }: { task: TaskData, onTaskDelete: () => void }) {
+export default function TaskCard({ task, onTaskDelete, openEditModal }: { task: TaskData, onTaskDelete: () => void, openEditModal: () => void }) {
     const [completed, setCompleted] = useState(task.is_completed || false);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
@@ -35,8 +35,8 @@ export default function TaskCard({ task, onTaskDelete }: { task: TaskData, onTas
         <div className={`task-card ${completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""}`}>
             <p className="task-text">{task.description}</p>
             <div className="task-actions">
-                <button className="task-btn edit-btn">
-                    <Pencil size={16} />
+                <button className="task-btn edit-btn" onClick={openEditModal}>
+                    <Pencil size={16}/>
                 </button>
                 <button className="task-btn complete-btn" onClick={handleComplete}>
                     <CheckCircle size={16} />

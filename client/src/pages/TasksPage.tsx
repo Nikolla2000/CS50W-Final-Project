@@ -4,10 +4,26 @@ import TaskCard from "../components/Tasks/TaskCard";
 import { fetchTasks } from "../services/taskService";
 import { Box, Typography } from "@mui/material";
 import "../components/Tasks/tasks.css";
+import EditModal from "../components/Tasks/EditModal";
 
 export default function TasksPage() {
     const [tasks, setTasks] = useState<TaskData[] | []>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
+    const [selectedTask, setSelectedTask] = useState<TaskData | null>(null);
+
+    const handleOpen = (task: TaskData) => {
+        setSelectedTask(task);
+        setOpen(true);
+      };
+
+    const handleUpdateTask = (updatedTask: TaskData) => {
+        setTasks((prevTasks) => 
+            prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+        );
+    };
 
     const getTasks = async () => {
         try {
@@ -37,12 +53,13 @@ export default function TasksPage() {
                     </Typography>
 
                     {tasks.length > 0 ? (
-                        tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks}/>)
+                        tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks} openEditModal={() => handleOpen(task)}/>)
                     ) : (
                         <Typography className="no-tasks-message" sx={{textAlign: 'left', fontSize: '1.2em' }}>
                             No tasks for today.
                         </Typography>
                     )}
+                    <EditModal open={open} handleClose={handleClose} onUpdate={handleUpdateTask} task={selectedTask}/>
                 </Box>
             )}
 
