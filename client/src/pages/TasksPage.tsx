@@ -14,6 +14,8 @@ export default function TasksPage() {
     const handleClose = () => setOpen(false);
     const [selectedTask, setSelectedTask] = useState<TaskData | null>(null);
 
+    const [allTasksCompleted, setAllTasksCompleted] = useState<boolean>(false);
+
     const handleOpen = (task: TaskData) => {
         setSelectedTask(task);
         setOpen(true);
@@ -35,6 +37,17 @@ export default function TasksPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (tasks.length > 0) {
+            const areAllTasksCompleted = tasks.every((task) => task.is_completed === true);
+            setAllTasksCompleted(areAllTasksCompleted);
+        } else {
+            setAllTasksCompleted(false);
+        }
+    }, [tasks]);
+    
+    console.log("All Tasks Completed:", allTasksCompleted)
 
     useEffect(() => {
         getTasks();
@@ -59,7 +72,53 @@ export default function TasksPage() {
                             No tasks for today.
                         </Typography>
                     )}
-                    <EditModal open={open} handleClose={handleClose} onUpdate={handleUpdateTask} task={selectedTask}/>
+
+                    {allTasksCompleted && (
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                padding: "20px",
+                                borderRadius: "12px",
+                                background: "linear-gradient(135deg, #4caf50, #81c784)",
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                                marginTop: "20px",
+                                animation: "fadeIn 0.8s ease-in-out",
+                                maxWidth: "400px"
+                            }}
+                        >
+                            <Typography
+                                variant="h4"
+                                sx={{
+                                    color: "#fff",
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                    letterSpacing: "1px",
+                                }}
+                            >
+                                🎉 Well Done! 🎉
+                            </Typography>
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    color: "#f1f1f1",
+                                    textAlign: "center",
+                                    marginTop: "5px",
+                                    fontStyle: "italic",
+                                }}
+                            >
+                                You've completed all your tasks for today! 🚀
+                            </Typography>
+                        </Box>
+                    )}
+                    <EditModal
+                        open={open}
+                        handleClose={handleClose}
+                        onUpdate={handleUpdateTask}
+                        task={selectedTask}
+                    />
                 </Box>
             )}
 

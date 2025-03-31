@@ -72,7 +72,8 @@
 }
 
 .task-card.completed {
-    background: #f0fdf4;
+    background: #bbffbb;
+    border-left:13px solid;
     border-left-color: #22c55e;
 }
 

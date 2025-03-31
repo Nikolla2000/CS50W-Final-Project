@@ -30,7 +30,7 @@ export default function AddTaskForm({ onTaskAdd }: { onTaskAdd: () => void } ) {
 
     const onSubmit: SubmitHandler<TaskData> = async (data: TaskData) => {
         try {
-            const res = await fetchAddNewTask(data, csrf);
+            await fetchAddNewTask(data, csrf);
             reset();
             onTaskAdd();
         } catch (err) {

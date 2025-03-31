@@ -62,3 +62,18 @@ export const fetchEditTask = async (data: EditTaskFormValues, taskId: string, cs
         console.log(err);
     }
 }
+
+
+export const fetchCompleteTask = async (taskId: string, csrfToken: string | null) => {
+    try {
+        const res = await api.patch(`/api/tasks/${taskId}/`, {}, {
+            headers: {
+                "X-CSRFToken": csrfToken,
+            },
+            withCredentials: true,
+        })
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}

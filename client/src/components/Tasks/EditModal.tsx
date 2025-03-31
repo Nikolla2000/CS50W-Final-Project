@@ -91,7 +91,7 @@ export default function EditModal({ open, handleClose, task, onUpdate }: {
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Edit task description"
+                // label="Edit task description"
                 variant="outlined"
                 fullWidth
                 margin="normal"
