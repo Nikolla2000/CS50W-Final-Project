@@ -15,3 +15,7 @@ export function GreenButton({ children, type  = "button", fullWidth = false} : B
 export function WhiteButton({ children, type  = "button", fullWidth = false} : ButtonProps) {
     return <button className={`btn-white-grad ${fullWidth ? 'full-width' : ''}`} type={type}>{children}</button>
 }
+
+export function LightBlueButton({ children, type  = "button", fullWidth = false} : ButtonProps) {
+    return <button className={`btn-lightblue-grad ${fullWidth ? 'full-width' : ''}`} type={type}>{children}</button>
+}

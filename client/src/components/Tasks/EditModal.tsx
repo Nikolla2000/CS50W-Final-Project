@@ -6,6 +6,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "../../providers/AuthProvider";
 import { TaskData } from "./AddTaskForm";
 import { useEffect } from "react";
+import { LightBlueButton } from "../Button/Button";
+import { fetchEditTask } from "../../services/taskService";
 
 const style = {
   position: "absolute",
@@ -27,7 +29,7 @@ const schema = z.object({
   description: z.string().min(1, "Task description is required").max(200, "Max 200 characters allowed"),
 });
 
-type EditTaskFormValues = {
+export type EditTaskFormValues = {
   description: string;
 };
 
@@ -49,10 +51,17 @@ export default function EditModal({ open, handleClose, task, onUpdate }: {
     reset({ description: task?.description || "" });
   }, [task, reset]);
 
+  const handleModalClose = () => {
+    reset({ description: task?.description || "" }); // Reset form when closing
+    handleClose();
+  };
+
   const onSubmit = async (data: EditTaskFormValues) => {
     if (!task?.id) return;
 
     try {
+      await fetchEditTask(data, task.id, csrf);
+
       const updatedTask = { ...task, description: data.description };
       onUpdate(updatedTask);
       handleClose();
@@ -62,10 +71,10 @@ export default function EditModal({ open, handleClose, task, onUpdate }: {
   };
 
   return (
-    <Modal open={open} onClose={handleClose} aria-labelledby="edit-task-modal">
+    <Modal open={open} onClose={handleModalClose} aria-labelledby="edit-task-modal">
       <Box sx={style}>
         <IconButton
-          onClick={handleClose}
+          onClick={handleModalClose}
           sx={{ position: "absolute", top: 10, right: 10, color: "#333" }}
         >
           <CloseIcon fontSize="large" />
@@ -94,24 +103,14 @@ export default function EditModal({ open, handleClose, task, onUpdate }: {
           />
 
           <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
-            <Button
-              variant="contained"
-              type="submit"
-              sx={{
-                px: 4, py: 1.5, fontWeight: "bold",
-                borderRadius: "30px", background: "#007bff",
-                color: "#fff", "&:hover": { background: "#0056b3" }
-              }}
-            >
-              Save
-            </Button>
+            <LightBlueButton type="submit">Save</LightBlueButton>
 
             <Button
               variant="outlined"
-              onClick={handleClose}
+              onClick={handleModalClose}
               sx={{
                 px: 4, py: 1.5, fontWeight: "bold",
-                borderRadius: "30px", color: "#d50000",
+                borderRadius: "10px", color: "#d50000",
                 borderColor: "#d50000", "&:hover": { background: "#ffebee" }
               }}
             >

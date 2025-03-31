@@ -2,10 +2,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from rest_framework.parsers import JSONParser
 
 from .models import Task
 from .serializers import TaskSerializer
 from django.utils import timezone
+from django.db import IntegrityError
 
 class Tasks(APIView):
     permission_classes = [IsAuthenticated]
@@ -72,6 +74,32 @@ class TaskDetailView(APIView):
         serializer = TaskSerializer(task)
         return Response(
             {"message": "Task marked as completed", "task": serializer.data}, status=status.HTTP_200_OK)
+    
+
+    def put(self, request, task_id):
+        task = self.get_object(task_id, request.user)
+
+        if not task:
+            return Response({ "message": "Task not found" }, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            data = JSONParser().parse(request)
+            description = data.get("description", task.description)
+            is_completed = task.is_completed
+            date = task.date
+
+            task.description = description
+            task.is_completed = is_completed
+            task.date = date
+            task.save()
+
+            serializer = TaskSerializer(task)
+            return Response({"message": "Task updated successfully", "task": serializer.data}, status=status.HTTP_200_OK)
+        except IntegrityError:
+            return Response({"message": "Database integrity error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"message": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
     def delete(self, request, task_id):

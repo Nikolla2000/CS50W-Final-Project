@@ -1,5 +1,6 @@
 import api from "../axiosConfig";
 import { TaskData } from "../components/Tasks/AddTaskForm";
+import { EditTaskFormValues } from "../components/Tasks/EditModal";
 
 export const fetchTasks = async() => {
     try {
@@ -38,6 +39,24 @@ export const fetchDeleteTask = async (taskId: string, csrfToken: string | null) 
             },
             withCredentials: true,
         });
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+export const fetchEditTask = async (data: EditTaskFormValues, taskId: string, csrfToken: string | null) => {
+    try {
+        const res = await api.put(`/api/tasks/${taskId}/`, {
+            description: data.description, 
+        },
+        {
+            headers: {
+                "X-CSRFToken": csrfToken,
+            },
+            withCredentials: true,
+        })
         return res.data;
     } catch (err) {
         console.log(err);
