@@ -21,3 +21,15 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.date}: {self.description}"
+
+
+class FocusTimerRecord(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="focus_records")
+    duration = models.DurationField(help_text="Best focus time in HH:MM:SS format")
+
+    class Meta:
+        verbose_name = "Focus Record"
+        verbose_name_plural = "Focus Records"
+    
+    def __str__(self):
+        return f"{self.user} record: {self.duration}"
