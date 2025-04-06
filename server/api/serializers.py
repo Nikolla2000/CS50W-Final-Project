@@ -2,12 +2,14 @@ from rest_framework import serializers
 from .models import Goal, Task
 from django.utils import timezone
 from .models import FocusTimerRecord
-from ..users.models import User
+from isodate import parse_duration
+from datetime import timedelta
+# from ..users.models import User
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['id', 'username', 'email']
 
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,9 +34,23 @@ class TaskSerializer(serializers.ModelSerializer):
             return value
         
 
+# serializers.py
+from django.utils.dateparse import parse_duration  # Use Django's built-in parser
+from rest_framework import serializers
+
 class FocusTimerRecordSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    
     class Meta:
         model = FocusTimerRecord
         fields = ['id', 'user', 'duration']
+        read_only_fields = ['id', 'user']
+
+    def validate_duration(self, value):
+        """Convert ISO duration string to timedelta using Django's parser"""
+        if isinstance(value, str):
+            try:
+                return parse_duration(value)
+            except (ValueError, TypeError):
+                raise serializers.ValidationError(
+                    "Duration must be in ISO 8601 format (e.g., PT1H30M15S)"
+                )
+        return value 

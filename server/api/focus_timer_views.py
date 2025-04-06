@@ -3,28 +3,36 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import FocusTimerRecord
 from .serializers import FocusTimerRecordSerializer
+from .models import FocusTimerRecord
 
 
-class FocusTimer(APIView):
+class FocusTimerView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # def get(self, request):
+    def get(self, request):     
+        try:
+              record = FocusTimerRecord.objects.filter(user=request.user).order_by("-duration").first()
+              if not record:
+                   return Response({ "message": "No records found", "data": None }, status=status.HTTP_200_OK)
+              serializer = FocusTimerRecordSerializer(record)
+              return Response({ "record": serializer.data }, status=status.HTTP_200_OK)
+        except Exception as e:
+              return Response({ "detail": str(e) }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+              
 
     def post(self, request):
-        time_value = request.data.get("newRecord")
-
-        if not time_value:
-            return Response({ "message": "A time value in milliseconds is required" }, status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            new_record = FocusTimerRecord.objects.create(
-                user=request.user,
-                duration=time_value
+            serializer = FocusTimerRecordSerializer(
+                data=request.data,
+                context={'request': request}
             )
-        except Exception as e:
-            return Response({ "message": f"An error occurred while creating the record: {str(e)}" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            if not serializer.is_valid():
+                return Response({ "status": "error", "message": "Validation failed", "errors": serializer.errors }, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = FocusTimerRecordSerializer(new_record)
-        return Response({ "message": "Record added successfully", "record": serializer.data }, status=status.HTTP_201_CREATED)
+            try:
+                serializer.save(user=request.user)
+                return Response({ "status": "success", "message": "Record created", "data": serializer.data }, status=status.HTTP_201_CREATED )
+            except Exception as e:
+                return Response(
+                    { "status": "error", "message": "Server error", "detail": str(e) }, status=status.HTTP_500_INTERNAL_SERVER_ERROR )

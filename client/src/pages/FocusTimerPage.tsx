@@ -1,12 +1,24 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button, Card, Typography, Box, CircularProgress } from '@mui/material';
 import { Play, Pause, RotateCcw, Trophy } from 'lucide-react';
+import { fetchAddNewRecord, msToISODuration } from '../services/focusTimerService';
+import { useAuth } from '../providers/AuthProvider';
+
+export interface FocusTimerRecord {
+  id?: number; 
+  user?: number;
+  duration: string;
+}
+
 
 export default function FocusTimerPage() {
   const [timer, setTimer] = useState<number>(0);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [record, setRecord] = useState<number>(0);
   const intervalRef = useRef<number | null>(null);
+
+  const authContext = useAuth() ?? { csrf: null, isAuthenticated: false, setIsAuthenticated: () => {} };
+  const { csrf } = authContext;
 
   useEffect(() => {
     const savedRecord = localStorage.getItem('focusTimerRecord');
@@ -24,7 +36,7 @@ export default function FocusTimerPage() {
     }
   };
 
-  const stopTimer = () => {
+  const stopTimer = async () => {
     if (isActive) {
       setIsActive(false);
       if (intervalRef.current) {
@@ -32,9 +44,18 @@ export default function FocusTimerPage() {
         intervalRef.current = null;
       }
       
-      if (timer > record) {
-        setRecord(timer);
-        localStorage.setItem('focusTimerRecord', timer.toString());
+      if (timer > record) {    
+        try {
+          const newRecord = {
+            duration: msToISODuration(timer)
+          };
+          await fetchAddNewRecord(newRecord, csrf);
+          
+          setRecord(timer);
+          localStorage.setItem('focusTimerRecord', timer.toString());
+        } catch (err) {
+          console.error("Save error:", err);
+        }
       }
     }
   };
