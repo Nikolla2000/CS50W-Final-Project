@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button, Card, Typography, Box, CircularProgress } from '@mui/material';
 import { Play, Pause, RotateCcw, Trophy } from 'lucide-react';
-import { fetchAddNewRecord, msToISODuration } from '../services/focusTimerService';
+import { fetchAddNewRecord, fetchRecord, isoDurationToMs, msToISODuration } from '../services/focusTimerService';
 import { useAuth } from '../providers/AuthProvider';
+import backgroundImage from '../assets/white-bg.avif'
 
 export interface FocusTimerRecord {
   id?: number; 
@@ -21,11 +22,22 @@ export default function FocusTimerPage() {
   const { csrf } = authContext;
 
   useEffect(() => {
-    const savedRecord = localStorage.getItem('focusTimerRecord');
-    if (savedRecord) {
-      setRecord(parseInt(savedRecord));
-    }
+    getRecord();
   }, []);
+  
+  const getRecord = async () => {
+    try {
+      const res = await fetchRecord();
+      if (res?.record?.duration) {
+        const durationMs = isoDurationToMs(res.record.duration);
+        console.log(durationMs)
+        setRecord(durationMs);
+      }
+    } catch (err) {
+      console.error("Failed to load record:", err);
+    }
+  }
+
 
   const startTimer = () => {
     if (!isActive) {
@@ -52,7 +64,7 @@ export default function FocusTimerPage() {
           await fetchAddNewRecord(newRecord, csrf);
           
           setRecord(timer);
-          localStorage.setItem('focusTimerRecord', timer.toString());
+          getRecord();
         } catch (err) {
           console.error("Save error:", err);
         }
@@ -98,14 +110,14 @@ export default function FocusTimerPage() {
           <CircularProgress
             variant="determinate"
             value={100}
-            size={220}
+            size={240}
             thickness={4}
             sx={{ color: 'grey.200' }}
           />
           <CircularProgress
             variant="determinate"
             value={progress}
-            size={220}
+            size={240}
             thickness={4}
             sx={{
               position: 'absolute',
