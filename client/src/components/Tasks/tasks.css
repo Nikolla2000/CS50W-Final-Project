@@ -3,9 +3,12 @@
     justify-content: center;
     align-items: flex-start;
     gap: 20px;
-    padding: 20px;
     min-height: 100vh;
     flex-wrap: wrap;
+    padding:25px;
+    background: url("../../assets/white-bg.avif");
+    background-size: contain;
+    background-repeat: repeat;
 }
 
 .tasks-container {

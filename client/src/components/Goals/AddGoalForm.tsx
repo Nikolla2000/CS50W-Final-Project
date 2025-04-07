@@ -44,6 +44,7 @@ export default function AddGoalForm() {
     };
   
     return (
+      <div className="addgoal-page-wrapper">
       <Box sx={{ maxWidth: 500, margin: '0 auto', padding: 3, borderRadius: 2, boxShadow: 3 }}>
         <Typography variant="h4" component="h1" gutterBottom className='addGoalTitle'>
           Add New Goal
@@ -87,5 +88,6 @@ export default function AddGoalForm() {
           <GreenButton type='submit' fullWidth>Add goal</GreenButton>
         </form>
       </Box>
+      </div>
     );
   }

@@ -1,13 +1,17 @@
 .goals-page-wrapper {
     min-height: 100vh;
-    padding:10px;
+    padding:25px;
+    background: url("../../assets/white-bg.avif");
+    background-size: contain;
+    background-repeat: repeat;
 }
 
-/* .css-kh0550 {
-  background: url("../../assets/white-bg.avif");
+.css-kh0550 {
+  /* background: url("../../assets/white-bg.avif");
   background-size: contain;
-  background-repeat: repeat;
-} */
+  background-repeat: repeat; */
+  padding: 0 !important;
+}
 
 .goal-card-wrapper {
     border-radius: 15px;
@@ -76,3 +80,13 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
+
+
+
+  .addgoal-page-wrapper {
+    min-height: 100vh;
+    padding:25px;
+    background: url("../../assets/white-bg.avif");
+    background-size: contain;
+    background-repeat: repeat;
+  }

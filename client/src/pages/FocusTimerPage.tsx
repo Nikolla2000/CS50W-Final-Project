@@ -3,7 +3,8 @@ import { Button, Card, Typography, Box, CircularProgress } from '@mui/material';
 import { Play, Pause, RotateCcw, Trophy } from 'lucide-react';
 import { fetchAddNewRecord, fetchRecord, isoDurationToMs, msToISODuration } from '../services/focusTimerService';
 import { useAuth } from '../providers/AuthProvider';
-import backgroundImage from '../assets/white-bg.avif'
+import "../components/FocusTimer/focustimer.css";
+import { FuturisticTechHeading } from '../components/Headings/Headings';
 
 export interface FocusTimerRecord {
   id?: number; 
@@ -93,6 +94,7 @@ export default function FocusTimerPage() {
   const progress = ((timer % 1500000) / 1500000) * 100; // 25 minutes = 1500000ms
 
   return (
+    <div className='focustimer-page-wrapper'>
     <Box
       display="flex"
       flexDirection="column"
@@ -101,11 +103,12 @@ export default function FocusTimerPage() {
       minHeight="80vh"
       p={3}
     >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Focus Timer
-      </Typography>
+
+      <FuturisticTechHeading>
+        FOCUS TIMER
+      </FuturisticTechHeading>
       
-      <Card sx={{ p: 4, borderRadius: 4, textAlign: 'center', width: '100%', maxWidth: 400 }}>
+      <Card sx={{ p: 4, borderRadius: 4, textAlign: 'center', width: '100%', maxWidth: 400, boxShadow: 6 }}>
         <Box position="relative" display="inline-flex" mb={3}>
           <CircularProgress
             variant="determinate"
@@ -191,5 +194,6 @@ export default function FocusTimerPage() {
         </Card>
       </Card>
     </Box>
+    </div>
   );
 }

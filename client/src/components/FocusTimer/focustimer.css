@@ -1,0 +1,7 @@
+.focustimer-page-wrapper {
+    min-height: 100vh;
+    padding:25px;
+    background: url("../../assets/white-bg.avif");
+    background-size: contain;
+    background-repeat: repeat;
+}
