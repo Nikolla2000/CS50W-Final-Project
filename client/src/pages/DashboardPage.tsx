@@ -7,11 +7,14 @@ import { fetchTasks } from '../services/taskService';
 import { GoalsData } from '../components/Goals/AddGoalForm';
 import { fetchGoals } from '../services/goalsService';
 import GoalCard from '../components/Goals/GoalCard';
+import { useNavigate } from 'react-router';
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [tasks, setTasks] = useState<TaskData[] | []>([]);
   const [goals, setGoals] = useState<GoalsData[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTasks();
@@ -60,7 +63,7 @@ const handleOpen = (goal: GoalsData) => {
               </Typography>
 
               {tasks.length > 0 ? (
-                    tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks} openEditModal={() => handleOpen(task)}/>)
+                    tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks} openEditModal={() => handleOpen(task)} onClick={() => navigate("/tasks")}/>)
                 ) : (
                     <Typography className="no-tasks-message" sx={{textAlign: 'left', fontSize: '1.2em' }}>
                         No tasks for today.

@@ -5,7 +5,7 @@ import { fetchCompleteTask, fetchDeleteTask } from "../../services/taskService";
 import { useAuth } from "../../providers/AuthProvider";
 import 'animate.css';
 
-export default function TaskCard({ task, onTaskDelete, openEditModal }: { task: TaskData, onTaskDelete: () => void, openEditModal: () => void }) {
+export default function TaskCard({ task, onTaskDelete, openEditModal, onClick }: { task: TaskData, onTaskDelete: () => void, openEditModal: () => void, onClick?: () => void }) {
     const [completed, setCompleted] = useState(task.is_completed || false);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
@@ -37,9 +37,17 @@ export default function TaskCard({ task, onTaskDelete, openEditModal }: { task: 
         }, 500);
     };
 
+    const handleCardClick = () => {
+        if (onClick) {
+            onClick();
+        }
+    };
 
     return (
-        <div className={`task-card ${task.is_completed || completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""}`}>
+        <div className={`task-card ${task.is_completed || completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""}`} 
+            onClick={handleCardClick}
+            style={{ cursor: onClick ? "pointer" : "default" }}>
+                
             <p className="task-text">{task.description}</p>
             <div className="task-actions">
                 {!completed && (
