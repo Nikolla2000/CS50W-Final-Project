@@ -24,7 +24,7 @@ export default function DashboardPage() {
   const getTasks = async () => {
     try {
         const data = await fetchTasks();
-        setTasks(data);
+        setTasks(data.filter((task: TaskData) => task.is_completed == false));
     } catch (err) {
         console.log(err);
     } finally {

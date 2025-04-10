@@ -5,7 +5,7 @@ import { fetchCompleteTask, fetchDeleteTask } from "../../services/taskService";
 import { useAuth } from "../../providers/AuthProvider";
 import 'animate.css';
 
-export default function TaskCard({ task, onTaskDelete, openEditModal, onClick }: { task: TaskData, onTaskDelete: () => void, openEditModal: () => void, onClick?: () => void }) {
+export default function TaskCard({ task, onTaskDelete, openEditModal, onClick, isFirstLoad, isNewestTask }: { task: TaskData, onTaskDelete: () => void, openEditModal: () => void, onClick?: () => void, isFirstLoad: boolean, isNewestTask: boolean }) {
     const [completed, setCompleted] = useState(task.is_completed || false);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
@@ -44,11 +44,11 @@ export default function TaskCard({ task, onTaskDelete, openEditModal, onClick }:
     };
 
     return (
-        <div className={`task-card ${task.is_completed || completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""}`} 
+        <div className={`task-card ${task.is_completed || completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""} ${!onClick  && !isFirstLoad && isNewestTask  ? "animate__animated animate__backInLeft" : ""}`} 
             onClick={handleCardClick}
             style={{ cursor: onClick ? "pointer" : "default" }}>
                 
-            <p className="task-text">{task.description}</p>
+            <p className="task-text">{task.description}{task.id}</p>
             <div className="task-actions">
                 {!completed && (
                     <>

@@ -16,6 +16,8 @@ export default function TasksPage() {
 
     const [allTasksCompleted, setAllTasksCompleted] = useState<boolean>(false);
 
+    const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
+
     const handleOpen = (task: TaskData) => {
         setSelectedTask(task);
         setOpen(true);
@@ -66,7 +68,12 @@ export default function TasksPage() {
                     </Typography>
 
                     {tasks.length > 0 ? (
-                        tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks} openEditModal={() => handleOpen(task)}/>)
+                        tasks.map((task, i) => <TaskCard 
+                                                task={task} 
+                                                key={task.id} 
+                                                onTaskDelete={getTasks} openEditModal={() => handleOpen(task)}
+                                                isFirstLoad={isFirstLoad}
+                                                isNewestTask={i === tasks.length - 1}/>)
                     ) : (
                         <Typography className="no-tasks-message" sx={{textAlign: 'left', fontSize: '1.2em' }}>
                             No tasks for today.
@@ -123,7 +130,7 @@ export default function TasksPage() {
             )}
 
             <Box className="add-task-form-container">
-                <AddTaskForm onTaskAdd={getTasks} />
+                <AddTaskForm onTaskAdd={getTasks} setIsFirstLoad={setIsFirstLoad}/>
             </Box>
         </Box>
     );
