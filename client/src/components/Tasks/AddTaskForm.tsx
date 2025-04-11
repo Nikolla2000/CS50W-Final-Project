@@ -17,7 +17,17 @@ const schema = z.object({
     description: z.string().min(1, 'This field is required').max(200, 'Task description can\'t be longer than 200 characters')
 })
 
-export default function AddTaskForm({ onTaskAdd, setIsFirstLoad }: { onTaskAdd: () => void; setIsFirstLoad: (bool: boolean) => void } ) {
+interface AddTaskFormProps {
+    onTaskAdd: () => void;
+    setIsFirstLoad: (bool: boolean) => void;
+    setEntranceAnimation: (value: boolean) => void;
+}
+
+export default function AddTaskForm({
+    onTaskAdd,
+    setIsFirstLoad,
+    setEntranceAnimation
+}: AddTaskFormProps) {
     const { control, handleSubmit, formState: { errors }, reset } = useForm<TaskData>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -34,6 +44,7 @@ export default function AddTaskForm({ onTaskAdd, setIsFirstLoad }: { onTaskAdd: 
             reset();
             onTaskAdd();
             setIsFirstLoad(false);
+            setEntranceAnimation(true);
         } catch (err) {
             console.log(err);
         }

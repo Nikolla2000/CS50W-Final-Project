@@ -4,8 +4,34 @@ import { CheckCircle, Pencil, Trash } from "lucide-react";
 import { fetchCompleteTask, fetchDeleteTask } from "../../services/taskService";
 import { useAuth } from "../../providers/AuthProvider";
 import 'animate.css';
+import { useSearchParams } from "react-router-dom";
 
-export default function TaskCard({ task, onTaskDelete, openEditModal, onClick, isFirstLoad, isNewestTask }: { task: TaskData, onTaskDelete: () => void, openEditModal: () => void, onClick?: () => void, isFirstLoad: boolean, isNewestTask: boolean }) {
+interface TaskCardProps {
+    task: TaskData;
+    onTaskDelete: () => void;
+    openEditModal?: () => void;
+    onClick?: () => void;
+    isFirstLoad?: boolean;
+    isNewestTask?: boolean;
+    setEntranceAnimation?: (value: boolean) => void;
+    entranceAnimation?: boolean;
+}
+
+export default function TaskCard({
+    task,
+    onTaskDelete,
+    openEditModal,
+    onClick,
+    isFirstLoad,
+    isNewestTask,
+    setEntranceAnimation,
+    entranceAnimation
+}: TaskCardProps) {
+    const [searchParams] = useSearchParams();
+    const taskIdParam = searchParams.get('task_id');
+    const [isHighlighted, setIsHighlighted] = useState<boolean>(taskIdParam == task.id);
+    console.log("taskidParam: ", taskIdParam, isHighlighted)
+    
     const [completed, setCompleted] = useState(task.is_completed || false);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
@@ -31,6 +57,7 @@ export default function TaskCard({ task, onTaskDelete, openEditModal, onClick, i
             try {
                 await fetchDeleteTask(task.id!, csrf);
                 onTaskDelete();
+                setEntranceAnimation(false);
             } catch (err) {
                 console.log(err);
             }
@@ -44,7 +71,7 @@ export default function TaskCard({ task, onTaskDelete, openEditModal, onClick, i
     };
 
     return (
-        <div className={`task-card ${task.is_completed || completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""} ${!onClick  && !isFirstLoad && isNewestTask  ? "animate__animated animate__backInLeft" : ""}`} 
+        <div className={`task-card ${task.is_completed || completed ? "completed" : ""} ${isDeleted ? "animate__animated animate__backOutLeft": ""} ${!onClick  && !isFirstLoad && isNewestTask && entranceAnimation  ? "animate__animated animate__backInLeft" : ""} ${isHighlighted ? "highlighted" : ""}`} 
             onClick={handleCardClick}
             style={{ cursor: onClick ? "pointer" : "default" }}>
                 

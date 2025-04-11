@@ -63,7 +63,7 @@ const handleOpen = (goal: GoalsData) => {
               </Typography>
 
               {tasks.length > 0 ? (
-                    tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks} openEditModal={() => handleOpen(task)} onClick={() => navigate("/tasks")}/>)
+                    tasks.map((task) => <TaskCard task={task} key={task.id} onTaskDelete={getTasks} onClick={() => navigate(`/tasks?task_id=${task.id}`)}/>)
                 ) : (
                     <Typography className="no-tasks-message" sx={{textAlign: 'left', fontSize: '1.2em' }}>
                         No tasks for today.

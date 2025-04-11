@@ -17,6 +17,7 @@ export default function TasksPage() {
     const [allTasksCompleted, setAllTasksCompleted] = useState<boolean>(false);
 
     const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
+    const [entranceAnimation, setEntranceAnimation] = useState<boolean>(true);
 
     const handleOpen = (task: TaskData) => {
         setSelectedTask(task);
@@ -73,7 +74,9 @@ export default function TasksPage() {
                                                 key={task.id} 
                                                 onTaskDelete={getTasks} openEditModal={() => handleOpen(task)}
                                                 isFirstLoad={isFirstLoad}
-                                                isNewestTask={i === tasks.length - 1}/>)
+                                                isNewestTask={i === tasks.length - 1}
+                                                setEntranceAnimation={setEntranceAnimation}
+                                                entranceAnimation={entranceAnimation}/>)
                     ) : (
                         <Typography className="no-tasks-message" sx={{textAlign: 'left', fontSize: '1.2em' }}>
                             No tasks for today.
@@ -130,7 +133,10 @@ export default function TasksPage() {
             )}
 
             <Box className="add-task-form-container">
-                <AddTaskForm onTaskAdd={getTasks} setIsFirstLoad={setIsFirstLoad}/>
+                <AddTaskForm 
+                    onTaskAdd={getTasks} 
+                    setIsFirstLoad={setIsFirstLoad} 
+                    setEntranceAnimation={setEntranceAnimation}/>
             </Box>
         </Box>
     );
