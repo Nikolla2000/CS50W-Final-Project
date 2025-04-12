@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
-export function FuturisticTechHeading({ children } : { children: React.ReactNode }) {
+export function FuturisticTechHeading({ children, page } : { children: React.ReactNode, page?: string }) {
     return (
         <Typography 
-            variant="h2"
+            variant={page == "dashboard" ?  "h3" : "h2"}
             component="h1"
             gutterBottom
             sx={{
@@ -14,12 +14,13 @@ export function FuturisticTechHeading({ children } : { children: React.ReactNode
                 textShadow: '0 0 5px rgba(25, 118, 210, 0.3)',
                 mb: 4,
                 position: 'relative',
+                // marginLeft: page == "dashboard" ? "30px" : "0px",
                 display: 'inline-block',
                 '&:before': {
-                content: '"> "',
+                content: page === "dashboard" ? undefined : '"> "',
                 position: 'absolute',
                 left: -30,
-                color: 'primary.light'
+                color: 'primary.light',
                 }
             }}
             >

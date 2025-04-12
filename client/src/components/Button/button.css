@@ -76,4 +76,45 @@
     /* color: #fff; */
     text-decoration: none;
   }
+
+
+
+
+ .btn-blue-grad {background: linear-gradient(rgb(52, 102, 174) 0%, rgb(83, 144, 241) 100%);}
+ .btn-blue-grad {
+    /* margin: 0; */
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: rgb(255, 255, 255);            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    border:none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .btn-blue-grad:hover {
+    background-position: right center; 
+    /* color: #fff; */
+    text-decoration: none;
+  }
+
+
+  .centered {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap:10px;
+  }
+ 
+  .centered-no-margin {
+    /* margin: 0 auto; */
+    display: flex;
+    align-items: center;
+    gap:10px;
+  }
  

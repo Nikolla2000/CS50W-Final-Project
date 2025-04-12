@@ -9,6 +9,8 @@ import { fetchGoals } from '../services/goalsService';
 import GoalCard from '../components/Goals/GoalCard';
 import { useNavigate } from 'react-router';
 import { Add, Timer, ChevronRight, TrendingUp, CheckCircle, CalendarToday } from '@mui/icons-material';
+import { BlueCenteredButton, LightBlueButton, LightBlueCenteredButton } from '../components/Button/Button';
+import { FuturisticTechHeading, GradientHeading, ModernhHeading } from '../components/Headings/Headings';
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -58,17 +60,20 @@ export default function DashboardPage() {
   return (
     <Box className='dashboard-page-wrapper' p={3} minHeight={"100vh"} sx={{ backgroundColor: '#f5f7fa' }}>
       {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
-              <CircularProgress size={60} />
+          <Box display="flex" justifyContent="center" alignItems="center" height="60vh">
+              <div className="loader"></div>
           </Box>
       ) : (
         <Box className="dashboard-container" maxWidth="xl" mx="auto">
           {/* Header with stats */}
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-            <Typography variant="h4" fontWeight="bold" color="primary">
+            {/* <Typography variant="h4" fontWeight="bold" color="primary">
               FocusFlow Dashboard
-            </Typography>
-            <Button 
+            </Typography> */}
+            <FuturisticTechHeading page="dashboard">
+              Dashboard
+            </FuturisticTechHeading>
+            {/* <Button 
               variant="contained" 
               color="primary" 
               startIcon={<Timer />}
@@ -76,7 +81,10 @@ export default function DashboardPage() {
               sx={{ borderRadius: '20px', px: 3, py: 1 }}
             >
               Start Focus Session
-            </Button>
+            </Button> */}
+            <BlueCenteredButton>
+              <Timer />Start Focus Session
+            </BlueCenteredButton>
           </Box>
 
           {/* Stats Cards */}
@@ -184,13 +192,11 @@ export default function DashboardPage() {
                     <Typography variant="body1" color="text.secondary" mb={2}>
                       No tasks for today. Enjoy your day!
                     </Typography>
-                    <Button 
-                      variant="outlined" 
-                      startIcon={<Add />}
-                      onClick={() => navigate('/tasks/add')}
-                    >
-                      Add Task
-                    </Button>
+                    <Box onClick={() => navigate("/tasks")}>
+                      <LightBlueCenteredButton>
+                        <Add/> Add Task
+                      </LightBlueCenteredButton>
+                    </Box>
                   </Box>
                 )}
               </Paper>
