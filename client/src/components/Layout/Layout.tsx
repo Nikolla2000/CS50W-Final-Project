@@ -13,18 +13,65 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Avatar,
+  Divider,
+  styled
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from "../../services/authService";
 import routes from "../../utils/routes.tsx";
 
 const drawerWidth = 240;
 
+// Styled components for modern look
+const GradientAppBar = styled(AppBar)(({ theme }) => ({
+  background: 'linear-gradient(135deg, #6e8efb, #a777e3)',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)',
+}));
+
+const ModernMenu = styled(Menu)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    width: '220px',
+    borderRadius: '12px',
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+    marginTop: '8px',
+    '& .MuiMenuItem-root': {
+      padding: '12px 16px',
+      fontSize: '0.9rem',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        backgroundColor: '#f5f5f5',
+        transform: 'translateX(4px)'
+      },
+      '& svg': {
+        marginRight: '12px',
+        color: '#6e8efb'
+      }
+    }
+  }
+}));
+
+const DrawerContent = styled(Box)(({ theme }) => ({
+  background: 'linear-gradient(180deg, #f6f9fc 0%, #ffffff 100%)',
+  height: '100%',
+  '& .MuiListItemButton-root': {
+    borderRadius: '8px',
+    margin: '4px 8px',
+    '&:hover': {
+      backgroundColor: '#eef2ff'
+    }
+  }
+}));
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [avatarInitial, setAvatarInitial] = useState<string>("");
   
   const navigate = useNavigate();
 
@@ -43,6 +90,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       console.log(`You are logged in as ${data.username}`);
       setUsername(data.first_name);
+      setAvatarInitial(data.first_name.charAt(0).toUpperCase());
     } catch (err) {
       console.log(err);
     }
@@ -55,6 +103,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const handleLogout = async () => {
     await logout();
     navigate("/login");
+    handleMenuClose();
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -67,61 +116,155 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" sx={{ zIndex: 1300, background: "linear-gradient(135deg, #575EDD, #558CD1)"  }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+      <GradientAppBar position="fixed" sx={{ zIndex: 1300 }}>
+        <Toolbar sx={{ padding: '0 16px !important' }}>
+          <IconButton 
+            edge="start" 
+            color="inherit" 
+            aria-label="menu" 
+            onClick={toggleDrawer}
+            sx={{
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              }
+            }}
+          >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ display: "flex", alignItems: "center", gap: "15px", fontWeight: "bold", marginLeft: "10px" }}>
-            FocusFlow
-            <img src="/src/assets/logo-only-bg-clear.png" className="logo" />
-          </Typography>
+          
+          <Box sx={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "10px", 
+            marginLeft: "10px",
+            '&:hover': {
+              cursor: 'pointer'
+            }
+          }} onClick={() => navigate('/')}>
+            <img 
+              src="/src/assets/logo-only-bg-clear.png" 
+              className="logo" 
+              style={{ 
+                height: '32px', 
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' 
+              }} 
+            />
+            <Typography variant="h6" noWrap sx={{ 
+              fontWeight: "700",
+              letterSpacing: '0.5px',
+              textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}>
+              FocusFlow
+            </Typography>
+          </Box>
+          
           <Box sx={{ flexGrow: 1 }} />
+          
           {username && (
-            <Box sx={{ display: "flex", alignItems: "center", position: "relative" }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ 
+              display: "flex", 
+              alignItems: "center", 
+              position: "relative",
+              gap: '8px'
+            }}>
+              <Avatar sx={{ 
+                bgcolor: '#a777e3',
+                width: 36,
+                height: 36,
+                fontSize: '1rem',
+                fontWeight: 'bold'
+              }}>
+                {avatarInitial}
+              </Avatar>
+              <Typography variant="subtitle1" sx={{ fontWeight: "600" }}>
                 {username}
               </Typography>
-              <IconButton onClick={handleMenuOpen} sx={{ color: "white" }}>
+              <IconButton 
+                onClick={handleMenuOpen} 
+                sx={{ 
+                  color: "white",
+                  padding: '4px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                  }
+                }}
+              >
                 <ArrowDropDownIcon />
               </IconButton>
               
-              {/* Dropdown Menu */}
-              <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-              transformOrigin={{ vertical: "top", horizontal: "center" }}
-              sx={{ 
-                "& .MuiPaper-root": { width: "200px", padding: "10px" }
-              }}
-            >
-              <MenuItem onClick={handleLogout} sx={{ fontSize: "1.1rem", padding: "12px" }}>
-                Logout
-              </MenuItem>
-            </Menu>
+              <ModernMenu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+              >
+                <MenuItem 
+                  onClick={handleLogout} 
+                  sx={{ 
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <LogoutIcon fontSize="small" />
+                  Logout
+                </MenuItem>
+              </ModernMenu>
             </Box>
           )}
         </Toolbar>
-      </AppBar>
+      </GradientAppBar>
 
-      <SwipeableDrawer anchor="left" open={open} onClose={toggleDrawer} onOpen={toggleDrawer}>
-        <Box sx={{ width: drawerWidth }} role="presentation" onClick={toggleDrawer}>
+      <SwipeableDrawer 
+        anchor="left" 
+        open={open} 
+        onClose={toggleDrawer} 
+        onOpen={toggleDrawer}
+        PaperProps={{
+          sx: {
+            width: drawerWidth,
+            borderRight: 'none'
+          }
+        }}
+      >
+        <DrawerContent>
           <Toolbar />
           <List>
             {routes.map((route) => (
               <ListItem disablePadding key={route.path}>
-                <ListItemButton component={Link} to={route.path}>
-                  <ListItemText primary={route.routeName} />
+                <ListItemButton 
+                  component={Link} 
+                  to={route.path}
+                  sx={{
+                    '&.Mui-selected': {
+                      backgroundColor: '#e0e7ff',
+                      color: '#6e8efb',
+                      fontWeight: '600'
+                    }
+                  }}
+                >
+                  <ListItemText 
+                    primary={route.routeName} 
+                    primaryTypographyProps={{
+                      fontWeight: '500'
+                    }}
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
           </List>
-        </Box>
+        </DrawerContent>
       </SwipeableDrawer>
 
-      <Box sx={{ flexGrow: 1, p: 3, mt: 8 }}>{children}</Box>
+      <Box sx={{ 
+        flexGrow: 1, 
+        p: 3, 
+        mt: 8,
+        background: '#f9fafc',
+        minHeight: 'calc(100vh - 64px)'
+      }}>
+        {children}
+      </Box>
     </Box>
   );
 }
