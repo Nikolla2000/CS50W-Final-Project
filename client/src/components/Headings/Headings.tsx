@@ -4,7 +4,7 @@ import React from "react";
 export function FuturisticTechHeading({ children, page } : { children: React.ReactNode, page?: string }) {
     return (
         <Typography 
-            variant={page == "dashboard" ?  "h3" : "h2"}
+            variant={page == "dashboard" || page == "goals" ?  "h3" : "h2"}
             component="h1"
             gutterBottom
             sx={{
