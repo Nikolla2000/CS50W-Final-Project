@@ -91,7 +91,7 @@ export default function GoalsPage() {
           </Select>
         </FormControl>
 
-        <AddNewButton link="/addgoal">New Goal</AddNewButton>
+        <AddNewButton link="/addgoal">+ New Goal</AddNewButton>
       </Box>
 
       {loading ? (

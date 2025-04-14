@@ -19,3 +19,11 @@ export function WhiteButton({ children, type  = "button", fullWidth = false} : B
 export function LightBlueButton({ children, type  = "button", fullWidth = false} : ButtonProps) {
     return <button className={`btn-lightblue-grad ${fullWidth ? 'full-width' : ''}`} type={type}>{children}</button>
 }
+
+export function LightBlueCenteredButton({ children, type  = "button", fullWidth = false} : ButtonProps) {
+    return <button className={`btn-lightblue-grad centered ${fullWidth ? 'full-width' : ''}`} type={type}>{children}</button>
+}
+
+export function BlueCenteredButton({ children, type  = "button", fullWidth = false} : ButtonProps) {
+    return <button className={`btn-blue-grad centered-no-margin ${fullWidth ? 'full-width' : ''}`} type={type}>{children}</button>
+}
