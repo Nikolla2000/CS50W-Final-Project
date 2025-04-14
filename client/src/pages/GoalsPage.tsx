@@ -23,12 +23,21 @@ export default function GoalsPage() {
   };
   const handleClose = () => setOpen(false);
 
+  const handleGoalCompleted = (completedGoalId: string) => {
+    setGoals(prevGoals => 
+      prevGoals.map(goal => 
+        goal.id === completedGoalId 
+          ? { ...goal, is_completed: true } 
+          : goal
+      )
+    );
+  };
+
   useEffect(() => {
     const getAllGoals = async () => {
       try {
         const data = await fetchGoals();
         setGoals(data);
-        setFilteredGoals(data);
       } catch (error) {
         console.error("Failed to fetch goals", error);
       } finally {
@@ -103,7 +112,12 @@ export default function GoalsPage() {
         </div>
       )}
 
-      <CompleteModal open={open} handleClose={handleClose} goal={selectedGoal} />
+      <CompleteModal 
+        open={open} 
+        handleClose={handleClose} 
+        goal={selectedGoal} 
+        onGoalCompleted={handleGoalCompleted} 
+      />
     </div>
   );
 }

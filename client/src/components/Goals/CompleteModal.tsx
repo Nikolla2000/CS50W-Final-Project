@@ -6,7 +6,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { GoalsData } from './AddGoalForm';
 import { completeGoal } from '../../services/goalsService';
 import { useAuth } from '../../providers/AuthProvider';
-import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -24,24 +23,27 @@ const style = {
   color: "#333",
 };
 
-export default function CompleteModal({ open, handleClose, goal }: { 
-    open: boolean;
-    handleClose: () => void;
-    goal: GoalsData | null;
-  }) {
-
+export default function CompleteModal({ 
+  open, 
+  handleClose, 
+  goal, 
+  onGoalCompleted 
+}: { 
+  open: boolean;
+  handleClose: () => void;
+  goal: GoalsData | null;
+  onGoalCompleted: (completedGoalId: string) => void;
+}) {
   const authContext = useAuth();
   const { csrf } = authContext;
-
-  const navigate = useNavigate();
 
   const handleCompleteGoal = async () => {
     if (!goal) return;
 
     try {
-      await completeGoal(goal.id, csrf);
+      await completeGoal(goal.id!, csrf);
+      onGoalCompleted(goal.id!);
       handleClose();
-      navigate("/goals");
     } catch (err) {
       console.log(err);
     }
