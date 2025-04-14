@@ -112,3 +112,13 @@ class TaskDetailView(APIView):
         return Response({"message": "Task deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
+class TaskCount(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        today = timezone.now().date()
+        count = Task.objects.filter(user=request.user, is_completed=True, date=today).count()
+
+        return Response({ "tasks_completed_today": count }, status=status.HTTP_200_OK)
+
+

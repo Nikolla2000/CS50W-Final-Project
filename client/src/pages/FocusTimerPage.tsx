@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button, Card, Typography, Box, CircularProgress } from '@mui/material';
 import { Play, Pause, RotateCcw, Trophy } from 'lucide-react';
-import { fetchAddNewRecord, fetchRecord, isoDurationToMs, msToISODuration } from '../services/focusTimerService';
+import { fetchAddNewRecord, fetchRecord, formatTime, isoDurationToMs, msToISODuration } from '../services/focusTimerService';
 import { useAuth } from '../providers/AuthProvider';
 import "../components/FocusTimer/focustimer.css";
 import { FuturisticTechHeading } from '../components/Headings/Headings';
@@ -76,19 +76,6 @@ export default function FocusTimerPage() {
   const resetTimer = () => {
     stopTimer();
     setTimer(0);
-  };
-
-  const formatTime = (milliseconds: number) => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    
-    return [
-      hours.toString().padStart(2, '0'),
-      minutes.toString().padStart(2, '0'),
-      seconds.toString().padStart(2, '0')
-    ].join(':');
   };
 
   const progress = ((timer % 1500000) / 1500000) * 100; // 25 minutes = 1500000ms

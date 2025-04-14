@@ -77,3 +77,15 @@ export const fetchCompleteTask = async (taskId: string, csrfToken: string | null
         console.log(err);
     }
 }
+
+
+export const fetchTasksCompletedCount = async () => {
+    try {
+        const res = await api.get("/api/tasks/count/", {
+            withCredentials: true,
+        });
+        return res.data.tasks_completed_today;
+    } catch (err) {
+        console.log(err);
+    }
+}
