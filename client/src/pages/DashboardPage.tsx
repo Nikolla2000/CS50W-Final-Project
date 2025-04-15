@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState({
     completedToday: 0,
     focusSessions:0,
-    streak: 5
+    goalsCompleted: 5
   });
 
   const navigate = useNavigate();
@@ -46,8 +46,11 @@ export default function DashboardPage() {
   const getAllGoals = async () => {
     try {
       const data = await fetchGoals();
-      // setGoals(data);
       setGoals(data.filter((goal: GoalsData) => goal.is_completed == false && new Date(goal.deadline) > new Date()))
+      setStats(prevStats => ({
+        ...prevStats,
+        goalsCompleted: data.filter((goal: GoalsData) => goal.is_completed ).length
+      }))
     } catch (error) {
       console.error("Failed to fetch goals", error);
     }
@@ -95,14 +98,22 @@ export default function DashboardPage() {
           </Box>
       ) : (
         <Box className="dashboard-container" maxWidth="xl" mx="auto">
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-            <FuturisticTechHeading page="dashboard">
-              Dashboard
-            </FuturisticTechHeading>
-
-            <BlueCenteredButton>
-              <Timer />Start Focus Session
-            </BlueCenteredButton>
+          <Box mb={4}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+              <FuturisticTechHeading page="dashboard">
+                Dashboard
+              </FuturisticTechHeading>
+              
+              <Box 
+                width={{ xs: '100%', md: 'auto' }} 
+                order={{ xs: 1, md: 0 }}
+                mt={{ xs: 2, md: 0 }}
+              >
+                <BlueCenteredButton>
+                  <Timer />Start Focus Session
+                </BlueCenteredButton>
+              </Box>
+            </Box>
           </Box>
 
           <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={3} mb={4}>
@@ -148,8 +159,8 @@ export default function DashboardPage() {
               <Box display="flex" alignItems="center">
                 <CalendarToday color="warning" sx={{ fontSize: 40, mr: 2 }} />
                 <Box>
-                  <Typography variant="h6" color="text.secondary">Current Streak</Typography>
-                  <Typography variant="h4" fontWeight="bold">{stats.streak} days</Typography>
+                  <Typography variant="h6" color="text.secondary">Total Goals Completed</Typography>
+                  <Typography variant="h4" fontWeight="bold">{stats.goalsCompleted}</Typography>
                 </Box>
               </Box>
             </Paper>
