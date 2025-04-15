@@ -30,7 +30,6 @@ import routes from "../../utils/routes.tsx";
 
 const drawerWidth = 240;
 
-// 🌊 Teal gradient with better contrast for white text
 const GradientAppBar = styled(AppBar)(({ theme }) => ({
   background: 'linear-gradient(135deg, #43cea2 0%, #185a9d 100%)',
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
@@ -60,7 +59,6 @@ const ModernMenu = styled(Menu)(({ theme }) => ({
   }
 }));
 
-// Darker glassy drawer background
 const DrawerContent = styled(Box)(({ theme }) => ({
   background: 'rgba(230, 255, 250, 0.6)',
   backdropFilter: 'blur(12px)',
@@ -101,7 +99,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     setOpen((prev) => !prev);
   };
 
-  const whoami = async () => {
+  const whoamiLayout = async () => {
     try {
       const res = await fetch("http://localhost:8000/users/whoami", {
         headers: { "Content-Type": "application/json" },
@@ -118,7 +116,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    whoami();
+    whoamiLayout();
   }, []);
 
   const handleLogout = async () => {

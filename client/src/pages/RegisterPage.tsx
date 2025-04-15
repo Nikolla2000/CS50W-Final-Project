@@ -11,7 +11,7 @@ export default function RegisterPage() {
                 <span>FocusFlow</span>
             </div>
             <div className="register-page-content">
-                <h2>Create an account and become unstoppable!</h2>
+                <h2>Your Goals. Your Flow. Your Time Starts Now.</h2>
                 <RegisterFormNew/>
                 <div className="register-link">
                     <Link to="/login">Already have an account? Click here to Sign In!</Link>
