@@ -1,4 +1,4 @@
-import React, { JSX, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   SwipeableDrawer,
@@ -14,26 +14,25 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  Divider,
   styled
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import TaskIcon from '@mui/icons-material/Task';
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import TimerIcon from '@mui/icons-material/Timer';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
+import BarChartIcon from "@mui/icons-material/BarChart";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { logout } from "../../services/authService";
 import routes from "../../utils/routes.tsx";
 
 const drawerWidth = 240;
 
-// 🌊 Teal gradient with better contrast for white text
 const GradientAppBar = styled(AppBar)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #43cea2 0%, #185a9d 100%)',
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+  background: 'linear-gradient(135deg, #6e8efb, #a777e3)',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   backdropFilter: 'blur(10px)',
   WebkitBackdropFilter: 'blur(10px)',
 }));
@@ -49,24 +48,23 @@ const ModernMenu = styled(Menu)(({ theme }) => ({
       fontSize: '0.9rem',
       transition: 'all 0.2s ease',
       '&:hover': {
-        backgroundColor: '#f0fdfb',
+        backgroundColor: '#f5f5f5',
         transform: 'translateX(4px)'
       },
       '& svg': {
         marginRight: '12px',
-        color: '#43cea2'
+        color: '#6e8efb'
       }
     }
   }
 }));
 
-// Darker glassy drawer background
 const DrawerContent = styled(Box)(({ theme }) => ({
-  background: 'rgba(230, 255, 250, 0.6)',
+  background: 'rgba(255, 255, 255, 0.6)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   height: '100%',
-  borderRight: '1px solid rgba(0, 0, 0, 0.05)',
+  borderRight: '1px solid rgba(255, 255, 255, 0.2)',
   paddingTop: theme.spacing(2),
   '& .MuiListItemButton-root': {
     borderRadius: '12px',
@@ -74,19 +72,19 @@ const DrawerContent = styled(Box)(({ theme }) => ({
     transition: 'all 0.3s ease',
     padding: '10px 16px',
     '&:hover': {
-      backgroundColor: '#daf5f0',
-      boxShadow: '0 4px 10px rgba(67, 206, 162, 0.1)',
-      transform: 'translateX(3px)'
+      backgroundColor: '#eef2ff',
+      boxShadow: '0 4px 8px rgba(110, 142, 251, 0.1)',
+      transform: 'translateX(2px)'
     }
   }
 }));
 
+// Example icon map for your routes
 const drawerIconMap: Record<string, JSX.Element> = {
   "/dashboard": <DashboardIcon />,
   "/goals": <EmojiEventsIcon />,
-  "/tasks": <TaskIcon />,
-  "/focustimer": <TimerIcon />,
-  "/productino": <SmartToyIcon />,
+  "/stats": <BarChartIcon />,
+  "/settings": <SettingsIcon />,
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -159,7 +157,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               alignItems: "center",
               gap: "10px",
               marginLeft: "10px",
-              '&:hover': { cursor: 'pointer' }
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
             onClick={() => navigate('/')}
           >
@@ -174,8 +174,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Typography variant="h6" noWrap sx={{
               fontWeight: "700",
               letterSpacing: '0.5px',
-              color: "#fff",
-              textShadow: '0 1px 2px rgba(0,0,0,0.25)'
+              textShadow: '0 2px 4px rgba(0,0,0,0.1)'
             }}>
               FocusFlow
             </Typography>
@@ -187,10 +186,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Box sx={{
               display: "flex",
               alignItems: "center",
+              position: "relative",
               gap: '8px'
             }}>
               <Avatar sx={{
-                bgcolor: '#43cea2',
+                bgcolor: '#a777e3',
                 width: 36,
                 height: 36,
                 fontSize: '1rem',
@@ -198,13 +198,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               }}>
                 {avatarInitial}
               </Avatar>
-              <Typography variant="subtitle1" sx={{ fontWeight: "600", color: "#fff" }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: "600" }}>
                 {username}
               </Typography>
               <IconButton
                 onClick={handleMenuOpen}
                 sx={{
-                  color: "#fff",
+                  color: "white",
                   padding: '4px',
                   '&:hover': {
                     backgroundColor: 'rgba(255, 255, 255, 0.1)'
@@ -252,13 +252,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   component={Link}
                   to={route.path}
                   selected={window.location.pathname === route.path}
-                  sx={{
-                    '&.Mui-selected': {
-                      backgroundColor: '#b2f0dd',
-                      color: '#185a9d',
-                      fontWeight: '600'
-                    }
-                  }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     {drawerIconMap[route.path] || <DashboardIcon fontSize="small" />}
@@ -281,7 +274,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         flexGrow: 1,
         p: 3,
         mt: 8,
-        background: '#f7fdfc',
+        background: '#f9fafc',
         minHeight: 'calc(100vh - 64px)'
       }}>
         {children}
