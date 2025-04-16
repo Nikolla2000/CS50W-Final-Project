@@ -7,6 +7,7 @@ import { countries } from "../../utils/countries"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCSRF, getSession, login, register } from "../../services/authService"
+import { useAuth } from "../../providers/AuthProvider"
 
 type FormValues = {
     username: string
@@ -52,28 +53,33 @@ const schema = z.object({
 
 export default function RegisterFormNew() {
 
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [csrf, setCsrf] = useState<string | null>(null);
+    const { isAuthenticated, setIsAuthenticated, csrf } = useAuth() || {};
     const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>({
         resolver: zodResolver(schema),
     })
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        getSessionData();
-    }, [])
+    // useEffect(() => {
+    //     getSessionData();
+    // }, [])
 
-    const getSessionData = async () => {
-        const session = await getSession();
-        if (session && session.isAuthenticated) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
-            const csrfToken = await getCSRF();
-            setCsrf(csrfToken);
+    // const getSessionData = async () => {
+    //     const session = await getSession();
+    //     if (session && session.isAuthenticated) {
+    //         setIsAuthenticated(true);
+    //     } else {
+    //         setIsAuthenticated(false);
+    //         const csrfToken = await getCSRF();
+    //         setCsrf(csrfToken);
+    //     }
+    // }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
         }
-    }
+    }, [isAuthenticated, navigate]);
 
 
     const onSubmit = async (data: FormValues) => {
@@ -83,23 +89,26 @@ export default function RegisterFormNew() {
         }
 
         try {
-            const registerResponse = await register(data, csrf);
+            // 1. Register the user
+            const registerResponse = await register(data, csrf || null);
             if (registerResponse.errors) {
                 setError("username", { type: "manual", message: registerResponse.errors.username });
                 throw new Error(registerResponse.error);
             }
 
-            const loginResponse = await login({ username: data.username, password: data.password }, csrf);
-            console.log('loginResponse:', loginResponse);
-            if (loginResponse?.message != "Successfully logged in.") {
-              setError("password", { type: "manual", message: loginResponse.message || "Login failed" });
-              throw new Error(loginResponse.error);
-            }
-
-            setIsAuthenticated(true);
-            navigate("/");
+            // 2. Log the user in automatically
+            await login({ username: data.username, password: data.password }, csrf || null);
+            
+            // 3. Update authentication state
+            setIsAuthenticated?.(true);
+            
+            // 4. The useEffect will handle the navigation when isAuthenticated changes
         } catch (err) {
             console.log("Error on register:", err);
+            setError("password", { 
+                type: "manual", 
+                message: "Registration or login failed. Please try again." 
+            });
         }
     }
 
