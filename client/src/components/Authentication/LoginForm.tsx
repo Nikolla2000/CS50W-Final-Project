@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getCSRF, getSession, login } from "../../services/authService";
+import { useAuth } from "../../providers/AuthProvider";
 
 type FormValues = {
     username: string
@@ -18,41 +19,47 @@ const schema = z.object({
 })
 
 export default function LoginForm() {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [csrf, setCsrf] = useState<string | null>(null);
+    // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    // const [csrf, setCsrf] = useState<string | null>(null);
+    const { isAuthenticated, setIsAuthenticated, csrf } = useAuth() || {};
     const navigate = useNavigate();
 
-    useEffect(() => {
-        getSessionData();
-    }, []);
+    // useEffect(() => {
+    //     getSessionData();
+    // }, []);
 
-    const getSessionData = async () => {
-        try {
-            const sessionData = await getSession();
-            if (sessionData.isAuthenticated) {
-                setIsAuthenticated(true);
-                navigate("/");
-            } else {
-                setIsAuthenticated(false);
-                const csrfToken = await getCSRF();
-                setCsrf(csrfToken);
-            }
-        } catch (err) {
-            console.error("Error getting session:", err);
-        }
-    }
+    // const getSessionData = async () => {
+    //     try {
+    //         const sessionData = await getSession();
+    //         if (sessionData.isAuthenticated) {
+    //             setIsAuthenticated(true);
+    //             navigate("/");
+    //         } else {
+    //             setIsAuthenticated(false);
+    //             const csrfToken = await getCSRF();
+    //             setCsrf(csrfToken);
+    //         }
+    //     } catch (err) {
+    //         console.error("Error getting session:", err);
+    //     }
+    // }
 
     
     const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>({
         resolver: zodResolver(schema),
     });
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
+        }
+    }, [isAuthenticated, navigate]);
+
 
     const onSubmit = async (data: FormValues) => {
         try {
-            await login(data, csrf);
-
-            setIsAuthenticated(true);
+            await login(data, csrf || null);
+            setIsAuthenticated?.(true);
             navigate("/");
         } catch (err) {
             setError("password", { type: "manual", message: "Invalid username or password" });

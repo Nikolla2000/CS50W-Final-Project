@@ -103,15 +103,16 @@ export const whoami = async () => {
 }
 
 
-export const logout = async () => {
+export const logout = async (): Promise<boolean> => {
     try {
-      const res = await fetch("http://localhost:8000/users/logout/", {
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
-
+        const res = await fetch("http://localhost:8000/users/logout/", {
+            credentials: "include",
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
+        return true;
     } catch (err) {
-      console.error("Error logging out:", err);
+        console.error("Error logging out:", err);
+        return false;
     }
-  };
+};

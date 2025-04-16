@@ -27,6 +27,7 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 
 import { logout } from "../../services/authService";
 import routes from "../../utils/routes.tsx";
+import { useAuth } from "../../providers/AuthProvider.tsx";
 
 const drawerWidth = 240;
 
@@ -93,6 +94,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [avatarInitial, setAvatarInitial] = useState<string>("");
 
+  const authContext = useAuth();
+// const { setIsAuthenticated } = authContext || {};
+
   const navigate = useNavigate();
 
   const toggleDrawer = () => {
@@ -119,11 +123,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     whoamiLayout();
   }, []);
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
-    handleMenuClose();
-  };
+  const { isAuthenticated, setIsAuthenticated, logout } = useAuth() || {};
+
+const handleLogout = async () => {
+    const success = await logout?.();
+    if (success) {
+        navigate("/login");
+        handleMenuClose();
+    }
+};
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
