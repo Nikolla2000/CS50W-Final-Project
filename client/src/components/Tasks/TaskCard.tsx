@@ -30,7 +30,6 @@ export default function TaskCard({
     const [searchParams] = useSearchParams();
     const taskIdParam = searchParams.get('task_id');
     const [isHighlighted, setIsHighlighted] = useState<boolean>(taskIdParam == task.id);
-    console.log("taskidParam: ", taskIdParam, isHighlighted)
     
     const [completed, setCompleted] = useState(task.is_completed || false);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);

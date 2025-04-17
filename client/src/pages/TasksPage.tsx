@@ -50,7 +50,6 @@ export default function TasksPage() {
         }
     }, [tasks]);
     
-    console.log("All Tasks Completed:", allTasksCompleted)
 
     useEffect(() => {
         getTasks();

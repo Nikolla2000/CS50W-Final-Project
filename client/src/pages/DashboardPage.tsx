@@ -108,6 +108,7 @@ export default function DashboardPage() {
                 width={{ xs: '100%', md: 'auto' }} 
                 order={{ xs: 1, md: 0 }}
                 mt={{ xs: 2, md: 0 }}
+                onClick={() => navigate('/focustimer')}
               >
                 <BlueCenteredButton>
                   <Timer />Start Focus Session
