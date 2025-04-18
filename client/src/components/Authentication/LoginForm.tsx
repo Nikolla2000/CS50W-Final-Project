@@ -6,8 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getCSRF, getSession, login } from "../../services/authService";
+import { useAuth } from "../../providers/AuthProvider";
 
-type FormValues = {
+export type FormValues = {
     username: string
     password: string
 }
@@ -18,27 +19,41 @@ const schema = z.object({
 })
 
 export default function LoginForm() {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [csrf, setCsrf] = useState<string | null>(null);
+    // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    // const [csrf, setCsrf] = useState<string | null>(null);
+
+    // const authContext = useAuth();
+    const { isAuthenticated } = useAuth()!;
+
     const navigate = useNavigate();
 
-    useEffect(() => {
-        getSessionData();
-    }, []);
+    // useEffect(() => {
+    //     getSessionData();
+    // }, []);
 
-    const getSessionData = async () => {
-        try {
-            const sessionData = await getSession();
-            if (sessionData.isAuthenticated) {
-                setIsAuthenticated(true);
-                navigate("/");
-            } else {
-                setIsAuthenticated(false);
-                const csrfToken = await getCSRF();
-                setCsrf(csrfToken);
-            }
-        } catch (err) {
-            console.error("Error getting session:", err);
+    // const getSessionData = async () => {
+    //     try {
+    //         const sessionData = await getSession();
+    //         if (sessionData.isAuthenticated) {
+    //             setIsAuthenticated(true);
+    //             navigate("/");
+    //         } else {
+    //             setIsAuthenticated(false);
+    //             const csrfToken = await getCSRF();
+    //             setCsrf(csrfToken);
+    //         }
+    //     } catch (err) {
+    //         console.error("Error getting session:", err);
+    //     }
+    // }
+
+    useEffect(() => {
+        isSignedIn();
+    }, [])
+
+    const isSignedIn = async () => {
+        if (isAuthenticated) {
+            navigate("/");
         }
     }
 
@@ -50,9 +65,9 @@ export default function LoginForm() {
 
     const onSubmit = async (data: FormValues) => {
         try {
-            await login(data, csrf);
+            await login(data);
 
-            setIsAuthenticated(true);
+            // setIsAuthenticated(true);
             navigate("/");
         } catch (err) {
             setError("password", { type: "manual", message: "Invalid username or password" });

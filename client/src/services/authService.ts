@@ -1,30 +1,49 @@
-export const login = async (data: { username: string; password: string }, csrf: string | null) => {
+import api from "../axiosConfig";
+import { FormValues } from "../components/Authentication/LoginForm";
+
+
+export const login = async (formData: FormValues) => {
+    // try {
+    //     const headers: Record<string, string> = {
+    //         "Content-Type": "application/json",
+    //     };
+
+    //     if (csrf) {
+    //         headers["X-CSRFToken"] = csrf;
+    //     }
+
+    //     const res = await fetch("http://localhost:8000/users/login/", {
+    //         method: "POST",
+    //         headers: headers,
+    //         credentials: "include",
+    //         body: JSON.stringify(data),
+    //     });
+
+    //     const respData = await res.json();
+
+    //     if (!res.ok) {
+    //         throw new Error(`${res.status}: ${respData.error}`);
+    //     }
+
+    //     return respData;
+    // } catch (err) {
+    //     console.error("Login failed:", err);
+    //     throw err;
+    // }
     try {
-        const headers: Record<string, string> = {
-            "Content-Type": "application/json",
-        };
-
-        if (csrf) {
-            headers["X-CSRFToken"] = csrf;
-        }
-
-        const res = await fetch("http://localhost:8000/users/login/", {
-            method: "POST",
-            headers: headers,
-            credentials: "include",
-            body: JSON.stringify(data),
-        });
-
-        const respData = await res.json();
-
-        if (!res.ok) {
-            throw new Error(`${res.status}: ${respData.error}`);
-        }
-
-        return respData;
+        const { data } = await api.post("/token/", formData, {
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            withCredentials: true,
+        })
+        localStorage.clear();
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        api.defaults.headers.common['Authorization'] = `Bearer ${data['accesss']}`;
+        window.location.href = "/";
     } catch (err) {
         console.error("Login failed:", err);
-        throw err;
     }
 };
 
