@@ -128,7 +128,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 const handleLogout = async () => {
     const success = await logout?.();
     if (success) {
-        navigate("/login");
+        // navigate("/login");
+        window.location.href = "/login";
         handleMenuClose();
     }
 };

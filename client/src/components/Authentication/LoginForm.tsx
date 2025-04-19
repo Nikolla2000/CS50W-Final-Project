@@ -60,7 +60,8 @@ export default function LoginForm() {
         try {
             await login(data, csrf || null);
             setIsAuthenticated?.(true);
-            navigate("/");
+            // navigate("/");
+            window.location.href = "/";
         } catch (err) {
             setError("password", { type: "manual", message: "Invalid username or password" });
         }

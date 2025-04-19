@@ -31,13 +31,14 @@ export default function DashboardPage() {
     getCompletedTasksCount();
     getFocusRecord();
     // Simulate fetching stats
-    setTimeout(() => setLoading(false), 1000);
+    // setTimeout(() => setLoading(false), 1000);
   }, [])
 
   const getTasks = async () => {
     try {
         const data = await fetchTasks();
         setTasks(data.filter((task: TaskData) => task.is_completed == false));
+        setLoading(false);
     } catch (err) {
         console.log(err);
     }
@@ -51,6 +52,7 @@ export default function DashboardPage() {
         ...prevStats,
         goalsCompleted: data.filter((goal: GoalsData) => goal.is_completed ).length
       }))
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch goals", error);
     }

@@ -60,24 +60,10 @@ export default function RegisterFormNew() {
 
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     getSessionData();
-    // }, [])
-
-    // const getSessionData = async () => {
-    //     const session = await getSession();
-    //     if (session && session.isAuthenticated) {
-    //         setIsAuthenticated(true);
-    //     } else {
-    //         setIsAuthenticated(false);
-    //         const csrfToken = await getCSRF();
-    //         setCsrf(csrfToken);
-    //     }
-    // }
-
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/");
+            // navigate("/");
+            window.location.href = "/";
         }
     }, [isAuthenticated, navigate]);
 
@@ -102,7 +88,6 @@ export default function RegisterFormNew() {
             // 3. Update authentication state
             setIsAuthenticated?.(true);
             
-            // 4. The useEffect will handle the navigation when isAuthenticated changes
         } catch (err) {
             console.log("Error on register:", err);
             setError("password", { 
