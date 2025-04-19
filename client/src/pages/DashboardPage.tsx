@@ -183,7 +183,7 @@ export default function DashboardPage() {
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                   <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
                     <Chip label="Today" color="primary" size="small" sx={{ mr: 2 }} />
-                    Your Tasks
+                    Active Tasks
                   </Typography>
                   <Button 
                     endIcon={<ChevronRight />} 
