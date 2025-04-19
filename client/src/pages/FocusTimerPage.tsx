@@ -31,7 +31,6 @@ export default function FocusTimerPage() {
       const res = await fetchRecord();
       if (res?.record?.duration) {
         const durationMs = isoDurationToMs(res.record.duration);
-        console.log(durationMs)
         setRecord(durationMs);
       }
     } catch (err) {

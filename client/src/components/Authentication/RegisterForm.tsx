@@ -54,8 +54,6 @@ export default function RegisterForm() {
             setError("confirmPassword", { type: "manual", message: "Passwords don't match" });
             return;
         }
-        
-        console.log(data);
     }
 
     return (

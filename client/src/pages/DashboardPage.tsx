@@ -61,7 +61,6 @@ export default function DashboardPage() {
   const getCompletedTasksCount = async () => {
     try {
       const data = await fetchTasksCompletedCount();
-      console.log(data);
       setStats(prevStats => ({
         ...prevStats,
         completedToday: data

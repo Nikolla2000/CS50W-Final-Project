@@ -21,7 +21,6 @@ export const promptChatBot = async (data: PromptFormValues, csrfToken: string | 
             },
             withCredentials: true,
         });
-        console.log(res.data);
         return res.data;
       } catch (err) {
         console.log(err);

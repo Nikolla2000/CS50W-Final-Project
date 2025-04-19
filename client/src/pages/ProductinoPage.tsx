@@ -26,7 +26,6 @@ export default function ProductinoPage() {
 	useEffect(() => {
 		const getConversation = async () => {
 			const data = await fetchConversation();
-			console.log(data);
 			setConversationHistory(data);
 		};
 

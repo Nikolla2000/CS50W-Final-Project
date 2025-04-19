@@ -75,17 +75,14 @@ export default function RegisterFormNew() {
         }
 
         try {
-            // 1. Register the user
             const registerResponse = await register(data, csrf || null);
             if (registerResponse.errors) {
                 setError("username", { type: "manual", message: registerResponse.errors.username });
                 throw new Error(registerResponse.error);
             }
 
-            // 2. Log the user in automatically
             await login({ username: data.username, password: data.password }, csrf || null);
             
-            // 3. Update authentication state
             setIsAuthenticated?.(true);
             
         } catch (err) {
