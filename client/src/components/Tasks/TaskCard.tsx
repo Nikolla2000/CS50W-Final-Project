@@ -1,6 +1,6 @@
 import { TaskData } from "./AddTaskForm";
 import { useState } from "react";
-import { CheckCircle, Pencil, Trash } from "lucide-react";
+import { Check, CheckCircle, Pencil, Trash } from "lucide-react";
 import { fetchCompleteTask, fetchDeleteTask } from "../../services/taskService";
 import { useAuth } from "../../providers/AuthProvider";
 import 'animate.css';
@@ -48,7 +48,7 @@ export default function TaskCard({
     };
 
     const handleDeleteTask = async () => {
-        if (!task.id) return;
+        if (!task.id || task.is_completed) return;
     
         setIsDeleted(true);
     
@@ -74,7 +74,7 @@ export default function TaskCard({
             onClick={handleCardClick}
             style={{ cursor: onClick ? "pointer" : "default" }}>
                 
-            <p className="task-text">{task.description}{task.id}</p>
+            <p className="task-text">{task.description}</p>
             <div className="task-actions">
                 {!completed && (
                     <>
@@ -84,11 +84,14 @@ export default function TaskCard({
                         <button className="task-btn complete-btn" onClick={handleComplete}>
                             <CheckCircle size={16} />
                         </button>
+                        <button className="task-btn delete-btn">
+                            <Trash size={16} onClick={handleDeleteTask}/>
+                        </button>
                     </>      
                 )}
-                <button className="task-btn delete-btn">
-                    <Trash size={16} onClick={handleDeleteTask}/>
-                </button>
+                {completed && (
+                    <Check size={20} color="green"/>
+                )}
             </div>
         </div>
     );
