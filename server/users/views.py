@@ -77,13 +77,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
-class HomeView(APIView):
+class UserView(APIView):
      
    permission_classes = (IsAuthenticated, )
    def get(self, request):
-       content = {'message': 'Welcome to the JWT Authentication page using React Js and Django!'}
+     #   content = {'message': 'Welcome to the JWT Authentication page using React Js and Django!'}
+     if not request.user.is_authenticated:
+         return Response({'isAuthenticated': False})
 
-       return Response(content)
+     return Response({'username': request.user.username, 'first_name': request.user.first_name})
    
 
 class LogoutView(APIView):
@@ -94,6 +96,6 @@ class LogoutView(APIView):
                refresh_token = request.data["refresh_token"]
                token = RefreshToken(refresh_token)
                token.blacklist()
-               return Response(status=status.HTTP_205_RESET_CONTENT)
+               return Response({ "message": "Logout sucessfull, token blacklisted" },status=status.HTTP_205_RESET_CONTENT)
           except Exception as e:
                return Response(status=status.HTTP_400_BAD_REQUEST)

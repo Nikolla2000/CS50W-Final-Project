@@ -44,6 +44,7 @@ export const login = async (formData: FormValues) => {
         window.location.href = "/";
     } catch (err) {
         console.error("Login failed:", err);
+        throw err;
     }
 };
 
@@ -123,14 +124,28 @@ export const whoami = async () => {
 
 
 export const logout = async () => {
-    try {
-      const res = await fetch("http://localhost:8000/users/logout/", {
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
+    // try {
+    //   const res = await fetch("http://localhost:8000/users/logout/", {
+    //     credentials: "include",
+    //   });
+    //   const data = await res.json();
+    //   if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
 
+    // } catch (err) {
+    //   console.error("Error logging out:", err);
+    // }
+    try {
+        const { data } = await api.post("/users/logout/", {
+            refresh_token:localStorage.getItem("refresh_token")
+        }, 
+        {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true
+        });
+        localStorage.clear();
+        api.defaults.headers.common['Authorization'] = null;
+        // window.location.href = "/login";
     } catch (err) {
-      console.error("Error logging out:", err);
+        console.error("Logout not working:", err);
     }
   };

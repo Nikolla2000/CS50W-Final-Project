@@ -10,6 +10,7 @@ import { AuthProvider } from './providers/AuthProvider.tsx'
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute.tsx'
 import routes from './utils/routes.tsx'
 import AddGoalForm from './components/Goals/AddGoalForm.tsx'
+import "./interceptors/axios"
 
 const router = createBrowserRouter([
   ...routes.map((route) => ({

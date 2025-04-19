@@ -13,6 +13,6 @@ urlpatterns = [
     # path('whoami/', views.whoami_view, name='whoami'),
     # path('register/', RegisterUserView.as_view(), name='register'),
 
-    path('home/', views.HomeView.as_view(), name ='home'),
+    path('user/', views.UserView.as_view(), name ='home'),
     path('logout/', views.LogoutView.as_view(), name ='logout'),
 ]

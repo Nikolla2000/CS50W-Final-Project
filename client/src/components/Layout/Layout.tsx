@@ -27,6 +27,7 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 
 import { logout } from "../../services/authService";
 import routes from "../../utils/routes.tsx";
+import api from "../../axiosConfig.ts";
 
 const drawerWidth = 240;
 
@@ -101,12 +102,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const whoamiLayout = async () => {
     try {
-      const res = await fetch("http://localhost:8000/users/whoami", {
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+      const token = localStorage.getItem('access_token')
+      const { data } = await api.get("http://localhost:8000/users/user/", {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
+      // if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
 
       setUsername(data.first_name);
       setAvatarInitial(data.first_name.charAt(0).toUpperCase());
@@ -121,7 +124,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login");
+    // navigate("/login");
     handleMenuClose();
   };
 
